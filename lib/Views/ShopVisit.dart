@@ -100,6 +100,8 @@ class _ShopVisitState extends State<ShopVisit> {
   bool checkboxValue3 = false;
   bool checkboxValue4 = false;
   String feedbackController = '';
+  String latitude = '';
+  String longitude ='';
 
  // Uint8List? _imageBytes;
 
@@ -131,9 +133,11 @@ class _ShopVisitState extends State<ShopVisit> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+         latitude  = position.latitude as String;
+       longitude = position.longitude as String;
 
-      double latitude = position.latitude;
-      double longitude = position.longitude;
+
+
 
       print('Latitude: $latitude, Longitude: $longitude');
 
@@ -743,7 +747,8 @@ class _ShopVisitState extends State<ShopVisit> {
                               signage: checkboxValue3,
                               productReviewed: checkboxValue4,
                               body: imageBytes,
-                             // longitude:
+                             longitude: longitude,
+                              latitude: latitude
 
 
                             ));
@@ -869,6 +874,8 @@ class _ShopVisitState extends State<ShopVisit> {
                             return;
                           }
 
+                          await saveCurrentLocation();
+
 
 
                           if (_imageFile != null || ShopNameController.text.isEmpty || BookerNameController.text.isNotEmpty || BookerNameController.text.isNotEmpty) {
@@ -887,7 +894,9 @@ class _ShopVisitState extends State<ShopVisit> {
                               planogram: checkboxValue2,
                               signage: checkboxValue3,
                               productReviewed: checkboxValue4,
-                                body: imageBytes
+                                body: imageBytes,
+                              latitude: latitude,
+                              longitude: longitude
 
                             ));
 
