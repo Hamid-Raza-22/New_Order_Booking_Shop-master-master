@@ -316,11 +316,20 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                   ),
                   child: TypeAheadField<String>(
                     suggestionsCallback: (pattern) async {
-                      return dropdownItems2
+                      List<String> suggestions = dropdownItems2
                           .where((option) =>
                           option.toLowerCase().contains(pattern.toLowerCase()))
                           .toList();
-                    },
+
+                      // Filter out items that have already been selected in previous rows
+                      for (int i = 0; i < firstTypeAheadControllers.length; i++) {
+                        String selectedProduct = firstTypeAheadControllers[i].text.toLowerCase();
+                        suggestions.removeWhere(
+                                (option) => option.toLowerCase() == selectedProduct);
+                      }
+
+                      return suggestions;
+                      },
                     itemBuilder: (context, suggestion) {
                       return ListTile(
                         title: Text(

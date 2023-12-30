@@ -77,8 +77,17 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
       return 'Cash recovery cannot be greater than current balance';
     }
 
+    // Check if cash recovery is zero
+    if (cashRecovery == 0) {
+      showToast('Cash recovery cannot be zero');
+      _cashRecoveryController.clear();
+      _netBalanceController.clear();
+      return 'Cash recovery cannot be zero';
+    }
+
     return null;
   }
+
 
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -634,6 +643,6 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
             ),
           ),
         ),
-        );
+    );
     }
 }

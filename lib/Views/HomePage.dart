@@ -417,12 +417,16 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                 onSelected: (value) async {
                   switch (value) {
                     case 1:
+
+                    DatabaseOutputs outputs = DatabaseOutputs();
+                    outputs.checkFirstRun();
                     // Show a loading indicator for 4 seconds
                       showLoadingIndicator(context);
-                      await Future.delayed(Duration(seconds: 4));
+                      await Future.delayed(Duration(seconds: 10));
 
                       // After 4 seconds, hide the loading indicator and perform the refresh logic
-                      Navigator.of(context, rootNavigator: true).pop(); // Pop the loading dialog
+                      Navigator.of(context, rootNavigator: true).pop();
+                      // Pop the loading dialog
                       // Add your logic for refreshing here
                       break;
 
