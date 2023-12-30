@@ -15,6 +15,8 @@ class ShopVisitModel {
   dynamic? productReviewed;
   Uint8List? body;
   String? feedback;
+  dynamic? latitude;
+  dynamic? longitude;
 
   ShopVisitModel({
 
@@ -23,15 +25,15 @@ class ShopVisitModel {
     this.shopName,
     this.userId,
     this.bookerName,
-
     this.brand,
-
     this.walkthrough,
     this.planogram,
     this.signage,
     this.productReviewed,
     this.body,
-    this.feedback
+    this.feedback,
+    this.longitude,
+    this.latitude
   });
 
   factory ShopVisitModel.fromMap(Map<dynamic, dynamic> json) {
@@ -49,7 +51,9 @@ class ShopVisitModel {
         body: json['body'] != null && json['body'].toString().isNotEmpty
             ? Uint8List.fromList(base64Decode(json['body'].toString()))
             : null,
-        feedback: json['feedback']
+        feedback: json['feedback'],
+      longitude: json['longitude'],
+      latitude: json['latitude']
     );
   }
 
@@ -66,8 +70,9 @@ class ShopVisitModel {
     'planogram': planogram,
     'signage': signage,
     'productReviewed': productReviewed,
-    'body':  body != null ? base64Encode(body!) : null,
-      'feedback': feedback// Add this line to store the imagePath in the database
+    'body':  body != null ? base64Encode(body!) : null, 'feedback': feedback,
+      'latitude':latitude,
+      'longitude': longitude// Add this line to store the imagePath in the database
      };
     }
 }

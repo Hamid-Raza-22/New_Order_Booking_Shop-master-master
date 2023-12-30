@@ -46,7 +46,9 @@ class DBHelperShopVisit {
         signage TEXT,
         productReviewed TEXT,
         body BLOB,
-        feedback TEXT
+        feedback TEXT,
+        latitude TEXT,
+        longitude TEXT
       )
     ''');
 
@@ -82,7 +84,7 @@ class DBHelperShopVisit {
     final db = await _db;
     try {
       if (db != null) {
-        String query = 'SELECT id, date, shopName, userId, bookerName, brand, walkthrough, planogram, signage, productReviewed, body, feedback FROM shopVisit';
+        String query = 'SELECT id, date, shopName, userId, bookerName, brand, walkthrough, planogram, signage, productReviewed, body, feedback, latitude, longitude FROM shopVisit';
 
         // Add LIMIT and OFFSET only if specified
         if (limit > 0) {
@@ -218,6 +220,8 @@ class DBHelperShopVisit {
               ? Uint8List.fromList(base64Decode(i['body'].toString()))
               : Uint8List(0),
           feedback: i['feedback'].toString(),
+          latitude: i['latitude'].toString(),
+          longitude: i['longitude'].toString()
         );
 
         // // Fetch the body data separately

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/services.dart';
@@ -99,6 +100,7 @@ class _ShopVisitState extends State<ShopVisit> {
   bool checkboxValue3 = false;
   bool checkboxValue4 = false;
   String feedbackController = '';
+
  // Uint8List? _imageBytes;
 
 
@@ -123,6 +125,24 @@ class _ShopVisitState extends State<ShopVisit> {
   //     dropdownItems = shopNames.map((dynamic item) => item.toString()).toSet().toList();
   //   });
   // }
+
+  Future<void> saveCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      double latitude = position.latitude;
+      double longitude = position.longitude;
+
+      print('Latitude: $latitude, Longitude: $longitude');
+
+      // Now you can use 'latitude' and 'longitude' variables as needed.
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
+
 
   _loadCounter() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -697,6 +717,8 @@ class _ShopVisitState extends State<ShopVisit> {
                             return;
                           }
 
+                          await saveCurrentLocation();
+
 
 
                           if (_imageFile != null || ShopNameController.text.isEmpty || BookerNameController.text.isNotEmpty || BookerNameController.text.isNotEmpty) {
@@ -720,7 +742,8 @@ class _ShopVisitState extends State<ShopVisit> {
                               planogram: checkboxValue2,
                               signage: checkboxValue3,
                               productReviewed: checkboxValue4,
-                              body: imageBytes
+                              body: imageBytes,
+                             // longitude:
 
 
                             ));
