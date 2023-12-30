@@ -216,12 +216,13 @@ class DBHelperShopVisit {
           planogram: i['planogram'].toString(),
           signage: i['signage'].toString(),
           productReviewed: i['productReviewed'].toString(),
+            feedback: i['feedback'].toString(),
+            latitude: i['latitude'].toString(),
+            longitude: i['longitude'].toString(),
           body: i['body'] != null && i['body'].toString().isNotEmpty
               ? Uint8List.fromList(base64Decode(i['body'].toString()))
               : Uint8List(0),
-          feedback: i['feedback'].toString(),
-          latitude: i['latitude'].toString(),
-          longitude: i['longitude'].toString()
+
         );
 
         // // Fetch the body data separately
@@ -230,6 +231,7 @@ class DBHelperShopVisit {
 
         // Print image path before trying to create the file
         print("Image Path from Database: ${i['body']}");
+        print("lat:${i['latitude']}");
 
         // Declare imageBytes outside the if block
         Uint8List imageBytes;

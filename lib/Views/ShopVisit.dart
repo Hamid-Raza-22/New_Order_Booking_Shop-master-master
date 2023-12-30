@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -100,8 +99,8 @@ class _ShopVisitState extends State<ShopVisit> {
   bool checkboxValue3 = false;
   bool checkboxValue4 = false;
   String feedbackController = '';
-  String latitude = '';
-  String longitude ='';
+  dynamic latitude = '';
+  dynamic longitude ='';
 
  // Uint8List? _imageBytes;
 
@@ -133,8 +132,8 @@ class _ShopVisitState extends State<ShopVisit> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-         latitude  = position.latitude as String;
-       longitude = position.longitude as String;
+         latitude  = position.latitude ;
+       longitude = position.longitude ;
 
 
 

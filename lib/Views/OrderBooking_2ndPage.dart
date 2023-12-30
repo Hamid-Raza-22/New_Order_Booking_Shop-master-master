@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -51,10 +50,11 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
   void initState() {
     // Initially add two rows
 
-   // _loadCounter();
+    // _loadCounter();
 
 
   }
+
 
   // // You can maintain this as a global variable or retrieve it from somewhere
   // _loadCounter() async {
@@ -100,7 +100,7 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
     final data =
     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-   // final orderId = data['orderId'];
+    // final orderId = data['orderId'];
     final orderDate = data['orderDate'];
     final user_name = data ['userName'];
     final shopName = data ['shopName'];
@@ -142,190 +142,200 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
     totalAmounts.fold<int>(0, (sum, amount) => sum + amount);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              buildSizedBox(30),
-              buildText('Order#'),
-              buildTextFormField(30, OrderMasterid, readOnly: true),
-              buildSizedBox(10),
-              buildText('Booker Name'),
-              buildTextFormField(30, user_name, readOnly: true),
-              buildSizedBox(10),
-              buildText('Order Date'),
-              buildTextFormField(30, orderDate.toString(), readOnly: true),
-              buildSizedBox(20),
-              buildHeading('Order Summary', 15),
-              buildSizedBox(10),
-              buildRow([
-                buildExpandedColumn('Description', 50, readOnly: true),
-                buildSizedBox(10),
-                buildExpandedColumn('Qty', 20, readOnly: true),
-                buildSizedBox(10),
-                buildExpandedColumn('Amount', 20, readOnly: true),
-              ]),
-              for (int i = 0; i < selectedItems.length; i++)
-                buildRow([
-                  buildExpandedColumn(selectedItems[i], 50, readOnly: true),
-                  buildSizedBox(10),
-                  buildExpandedColumn(quantities[i].toString(), 20,
-                      readOnly: true),
-                  buildSizedBox(10),
-                  buildExpandedColumn(totalAmounts[i].toString(), 20,
-                      readOnly: true),
-                ]),
-              buildSizedBox(10),
-              buildRow([
-                buildText('Total                      '),
-                buildSizedBox(10),
-                buildExpandedColumn(totalAmount.toString(), 10, readOnly: true),
-              ]),
-              buildSizedBox(10),
-
-              buildRow([
-                buildText('Credit limit            '),
-                buildSizedBox(10),
-                buildExpandedColumn(creditLimit, 10, readOnly: true),
-              ]),
-
-              buildSizedBox(10),
-
-              // buildDropdownRow('Credit Limit', 10, creditLimitOptions,
-              //     onChanged: (value) {
-              //       // Handle the selected credit limit value
-              //       // You can save the selected value to your state or perform any other action.
-              //     } ),
-              // buildSizedBox(10),
-              buildRow([
-                buildText('Discount               '),
-                buildSizedBox(10),
-                buildExpandedColumn(discount.toString(), 10,
-                    readOnly: true, controller: TextEditingController()),
-              ]),
-              buildSizedBox(10),
-              buildRow([
-                buildText('Net Total              '),
-                buildSizedBox(10),
-                buildExpandedColumn(subTotal.toString(), 10,
-                    readOnly: true, controller: TextEditingController()),
-              ]),
-
-              buildSizedBox(10),
-              buildRow([
-                buildText('Required Delivery '),
-                buildSizedBox(10),
-                buildExpandedColumn(requiredDelivery.toString(), 10,
-                    readOnly: true, controller: TextEditingController()),
-              ]),buildSizedBox(10),
-              Column(
+        body:  WillPopScope(
+          onWillPop: () async {
+            // Check if the order is confirmed
+            if (isOrderConfirmed) {
+              // Order is confirmed, prevent going back
+              return false;
+            } else {
+              // Order is not confirmed, allow going back
+              return true;
+            }
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  buildSizedBox(30),
+                  buildText('Order#'),
+                  buildTextFormField(30, OrderMasterid, readOnly: true),
+                  buildSizedBox(10),
+                  buildText('Booker Name'),
+                  buildTextFormField(30, user_name, readOnly: true),
+                  buildSizedBox(10),
+                  buildText('Order Date'),
+                  buildTextFormField(30, orderDate.toString(), readOnly: true),
+                  buildSizedBox(20),
+                  buildHeading('Order Summary', 15),
+                  buildSizedBox(10),
+                  buildRow([
+                    buildExpandedColumn('Description', 50, readOnly: true),
+                    buildSizedBox(10),
+                    buildExpandedColumn('Qty', 20, readOnly: true),
+                    buildSizedBox(10),
+                    buildExpandedColumn('Amount', 20, readOnly: true),
+                  ]),
+                  for (int i = 0; i < selectedItems.length; i++)
+                    buildRow([
+                      buildExpandedColumn(selectedItems[i], 50, readOnly: true),
+                      buildSizedBox(10),
+                      buildExpandedColumn(quantities[i].toString(), 20,
+                          readOnly: true),
+                      buildSizedBox(10),
+                      buildExpandedColumn(totalAmounts[i].toString(), 20,
+                          readOnly: true),
+                    ]),
+                  buildSizedBox(10),
+                  buildRow([
+                    buildText('Total                      '),
+                    buildSizedBox(10),
+                    buildExpandedColumn(totalAmount.toString(), 10, readOnly: true),
+                  ]),
                   buildSizedBox(10),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  buildRow([
+                    buildText('Credit limit            '),
+                    buildSizedBox(10),
+                    buildExpandedColumn(creditLimit, 10, readOnly: true),
+                  ]),
+
+                  buildSizedBox(10),
+
+                  // buildDropdownRow('Credit Limit', 10, creditLimitOptions,
+                  //     onChanged: (value) {
+                  //       // Handle the selected credit limit value
+                  //       // You can save the selected value to your state or perform any other action.
+                  //     } ),
+                  // buildSizedBox(10),
+                  buildRow([
+                    buildText('Discount               '),
+                    buildSizedBox(10),
+                    buildExpandedColumn(discount.toString(), 10,
+                        readOnly: true, controller: TextEditingController()),
+                  ]),
+                  buildSizedBox(10),
+                  buildRow([
+                    buildText('Net Amount              '),
+                    buildSizedBox(10),
+                    buildExpandedColumn(subTotal.toString(), 10,
+                        readOnly: true, controller: TextEditingController()),
+                  ]),
+
+                  buildSizedBox(10),
+                  buildRow([
+                    buildText('Required Delivery '),
+                    buildSizedBox(10),
+                    buildExpandedColumn(requiredDelivery.toString(), 10,
+                        readOnly: true, controller: TextEditingController()),
+                  ]),buildSizedBox(10),
+                  Column(
                     children: [
-                      Container(
-                        width: 170,
-                      child: buildElevatedButton('Re Confirm', () async {
-    if (!isReConfirmButtonPressed) {
-    isReConfirmButtonPressed = true; // Mark the button as pressed
+                      buildSizedBox(10),
 
-    isOrderConfirmed = true;
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 170,
+                            child: buildElevatedButton('Re Confirm', () async {
+                              if (!isReConfirmButtonPressed) {
+                                // Mark the button as pressed
+                                isReConfirmButtonPressed = true;
 
-    ordermasterViewModel.addOrderMaster(OrderMasterModel(
-    orderId: OrderMasterid,
-    shopName: shopName,
-    ownerName: ownerName,
-    phoneNo: phoneNo,
-    brand: brand,
-    date: date,
-    userId: userId.toString(),
-    userName: userNames.toString(),
-    total: total,
-    creditLimit: creditLimit,
-    discount: discount,
-    subTotal: subTotal,
-    requiredDelivery: requiredDelivery,
-    ));
+                                // Your existing code for handling the "Re Confirm" button press
+                                isOrderConfirmed = true;
+                                ordermasterViewModel.addOrderMaster(OrderMasterModel(
+                                  orderId: OrderMasterid,
+                                  shopName: shopName,
+                                  ownerName: ownerName,
+                                  phoneNo: phoneNo,
+                                  brand: brand,
+                                  date: date,
+                                  userId: userId.toString(),
+                                  userName: userNames.toString(),
+                                  total: total,
+                                  creditLimit: creditLimit,
+                                  discount: discount,
+                                  subTotal: subTotal,
+                                  requiredDelivery: requiredDelivery,
+                                ));
 
-    List<OrderDetailsModel> orderDetailsList = [];
+                                List<OrderDetailsModel> orderDetailsList = [];
 
-    await saveRowDataDetailsToDatabase(rowDataDetails);
+                                await saveRowDataDetailsToDatabase(rowDataDetails);
 
-    await DBHelperOrderMaster().addOrderDetails(orderDetailsList);
+                                await DBHelperOrderMaster().addOrderDetails(orderDetailsList);
 
-    DBHelperOrderMaster dbmaster = DBHelperOrderMaster();
+                                DBHelperOrderMaster dbmaster = DBHelperOrderMaster();
 
-    await dbmaster.postMasterTable();
-    await dbmaster.postOrderDetails();
+                                await dbmaster.postMasterTable();
+                                await dbmaster.postOrderDetails();
 
+                                Fluttertoast.showToast(
+                                  msg: "Order confirmed!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Order has already been confirmed.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                );
+                              }
+                            }),
+                          ),
 
-    Fluttertoast.showToast(
-      msg: "Order confirmed!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-    );
-    } else {
-      Fluttertoast.showToast(
-        msg: "Order has already been confirmed.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-    }
-                      }),
+                        ],
                       ),
+                      buildSizedBox(20),
 
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            child: buildElevatedButton('PDF Share', () {
+                              if (isOrderConfirmed) {
+                                // Order is confirmed, generate and share the PDF
+                                generateAndSharePDF(orderMasterid, user_name, shopName, orderDate, selectedItems, quantities, rates, totalAmounts, totalAmount, creditLimit, discount, subTotal, requiredDelivery);
+                              } else {
+                                // Order is not confirmed, show a toast message
+                                Fluttertoast.showToast(
+                                  msg: "Please confirm the order before sharing the PDF.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                );
+                              }
+                            }),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
 
-                  buildSizedBox(20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
+                  Column(children: [
+                    buildSizedBox(10),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
                         width: 100,
-                        child: buildElevatedButton('PDF Share', () {
+                        child: buildElevatedButton('Close', () {
                           if (isOrderConfirmed) {
-                            // Order is confirmed, generate and share the PDF
-                            generateAndSharePDF(orderMasterid, user_name, shopName, orderDate, selectedItems, quantities, rates, totalAmounts, totalAmount, creditLimit, discount, subTotal, requiredDelivery);
-                          } else {
-                            // Order is not confirmed, show a toast message
-                            Fluttertoast.showToast(
-                              msg: "Please confirm the order before sharing the PDF.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
                             );
-                          }
-                        }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-              Column(children: [
-                buildSizedBox(10),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: 100,
-                    child: buildElevatedButton('Close', () {
-                          if (isOrderConfirmed) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                      );
 
                           } else {
                             // Order is not confirmed, show a toast message
@@ -337,18 +347,18 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
                               textColor: Colors.white,
                             );
                           }
-                    }
-                    ),
+                        }
+                        ),
 
+                      ),
+                    ),
+                  ]
                   ),
-                ),
-              ]
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   // String currentMonth = DateFormat('MMM').format(DateTime.now());
@@ -661,7 +671,7 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text('Grand Total: ${totalQuantity.toString()} PCS', style: pw.TextStyle(fontSize: 15)),
-                          pw.Text('Net Total: ${subTotal.toString()}', style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
+                          pw.Text('Net Amount: ${subTotal.toString()}', style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
                         ],
                       ),
 
@@ -707,21 +717,21 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
 
     // Share the PDF
     await Share.shareFiles([output.path], text: 'PDFDocument');
-    }
+  }
 
   Widget buildElevatedButton(String txt, [Function()? onPressed]) {
     return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        primary: Colors.green,
-        onPrimary: Colors.white,
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          primary: Colors.green,
+          onPrimary: Colors.white,
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          minimumSize: Size(200, 50),
         ),
-        minimumSize: Size(200, 50),
-      ),
-      child: Text(txt),
-    );
-  }
+        child: Text(txt),
+        );
+    }
 }

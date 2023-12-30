@@ -37,12 +37,15 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   double currentBalance = 0.0;
   String currentUserId = '';
   String currentMonth = DateFormat('MMM').format(DateTime.now());
+
+
+
   @override
   void initState() {
     super.initState();
     //selectedDropdownValue = dropdownItems[0];
     _dateController.text = getCurrentDate();
-    _cashRecoveryController.text = '0'; // Assuming initial value is zero
+    _cashRecoveryController.text = ''; // Assuming initial value is zero
     _netBalanceController.text = '0'; // Assuming initial value is zero
     //fetchShopData();
     onCreatee();
@@ -69,8 +72,8 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     // Check if cash recovery is greater than current balance
     if (cashRecovery > currentBalance) {
       showToast('Cash recovery cannot be greater than current balance');
-         _cashRecoveryController.clear();
-        _netBalanceController.clear();
+      _cashRecoveryController.clear();
+      _netBalanceController.clear();
       return 'Cash recovery cannot be greater than current balance';
     }
 
@@ -252,6 +255,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   Widget build(BuildContext context) {
     double inputWidth = MediaQuery.of(context).size.width * 0.25;
     double dropdownWidth = 1000;
+
 
     return Scaffold(
         appBar: AppBar(
@@ -456,7 +460,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
                                             selectedDropdownValue='';
                                             _currentBalanceController.clear();
                                             _cashRecoveryController.clear();
-                                             _netBalanceController.clear();
+                                            _netBalanceController.clear();
 
                                             return 'Cash recovery cannot be greater than current balance';
                                           }
@@ -515,73 +519,90 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
                         ElevatedButton(
                           onPressed: () async {
                             if (!isButtonPressed && selectedDropdownValue!.isNotEmpty) {
-                              // Set the flag to true to indicate that the button has been pressed
-                              setState(() {
-                                isButtonPressed = true;
-                              });
+                              // Check if both text fields are not empty
+                              if (_cashRecoveryController.text.isNotEmpty && _netBalanceController.text.isNotEmpty) {
+                                // Set the flag to true to indicate that the button has been pressed
+                                setState(() {
+                                  isButtonPressed = true;
+                                });
 
-                              String? cashRecoveryValidation = validateCashRecovery(_cashRecoveryController.text);
+                                String? cashRecoveryValidation = validateCashRecovery(_cashRecoveryController.text);
 
-                              // Check if validation passes
-                              if (cashRecoveryValidation == null) {
-                                // Validation passed, proceed with your submission logic
-                                if (currentBalance > 0.0) {
-                                  try {
-                                    String newOrderId2 = generateNewOrderId(
-                                        Receipt, userId.toString(), currentMonth);
+                                // Check if validation passes
+                                if (cashRecoveryValidation == null) {
+                                  // Validation passed, proceed with your submission logic
+                                  if (currentBalance > 0.0) {
+                                    try {
+                                      String newOrderId2 = generateNewOrderId(
+                                          Receipt, userId.toString(), currentMonth);
 
-                                    recoveryformViewModel.addRecoveryForm(
-                                      RecoveryFormModel(
-                                        recoveryId: newOrderId2,
-                                        shopName: selectedDropdownValue,
-                                        cashRecovery: _cashRecoveryController.text,
-                                        netBalance: _netBalanceController.text,
-                                        date: getCurrentDate(),
-                                        userId: userId,
-                                      ),
-                                    );
-
-                                    DBHelperRecoveryForm dbrecoveryform = DBHelperRecoveryForm();
-                                    await dbrecoveryform.postRecoveryFormTable();
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => RecoveryForm_2ndPage(
-                                          formData: {
-                                            'recoveryId': newOrderId2,
-                                            'shopName': selectedDropdownValue,
-                                            'cashRecovery': _cashRecoveryController.text,
-                                            'netBalance': _netBalanceController.text,
-                                            'date': getCurrentDate(),
-                                          },
+                                      recoveryformViewModel.addRecoveryForm(
+                                        RecoveryFormModel(
+                                          recoveryId: newOrderId2,
+                                          shopName: selectedDropdownValue,
+                                          cashRecovery: _cashRecoveryController.text,
+                                          netBalance: _netBalanceController.text,
+                                          date: getCurrentDate(),
+                                          userId: userId,
                                         ),
-                                      ),
-                                    );
+                                      );
 
-                                    // Clear text fields after submitting
-                                    // _cashRecoveryController.clear();
-                                    // _netBalanceController.clear();
-                                  } catch (e) {
-                                    print('Error during submission: $e');
-                                  } finally {
-                                    // Reset the flag to false after successful submission or any error
+                                      DBHelperRecoveryForm dbrecoveryform = DBHelperRecoveryForm();
+                                      await dbrecoveryform.postRecoveryFormTable();
+
+                                      // Check if cash recovery is not null before moving to the next page
+                                      if (_cashRecoveryController.text.isNotEmpty) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => RecoveryForm_2ndPage(
+                                              formData: {
+                                                'recoveryId': newOrderId2,
+                                                'shopName': selectedDropdownValue,
+                                                'cashRecovery': _cashRecoveryController.text,
+                                                'netBalance': _netBalanceController.text,
+                                                'date': getCurrentDate(),
+                                              },
+                                            ),
+                                          ),
+                                        );
+
+                                        // Clear text fields after submitting
+                                        // _cashRecoveryController.clear();
+                                        // _netBalanceController.clear();
+                                      } else {
+                                        // Display an error message if cash recovery is empty
+                                        showToast('Please fill in the Cash Recovery field before moving to the next page.');
+                                      }
+                                    } catch (e) {
+                                      print('Error during submission: $e');
+                                    } finally {
+                                      // Reset the flag to false after successful submission or any error
+                                      setState(() {
+                                        isButtonPressed = false;
+                                      });
+                                    }
+                                  } else {
+                                    // Show a toast or display an error message for current balance <= 0.0
+                                    showToast('Current balance must be greater than 0.0 for submission.');
+
+                                    // Reset the flag to false after validation fails
                                     setState(() {
                                       isButtonPressed = false;
                                     });
                                   }
                                 } else {
-                                  // Show a toast or display an error message for current balance <= 0.0
-                                  print('Current balance must be greater than 0.0 for submission.');
+                                  // Validation failed, display an error message or take appropriate action
+                                  showToast(cashRecoveryValidation);
 
-                                  // Reset the flag to false after validation fails
+                                  // Reset the flag to false if validation fails
                                   setState(() {
                                     isButtonPressed = false;
                                   });
                                 }
                               } else {
-                                // Validation failed, display an error message or take appropriate action
-                                print(cashRecoveryValidation);
+                                // Display an error message if any text field is empty
+                                showToast('Please fill in all fields before submitting.');
 
                                 // Reset the flag to false if validation fails
                                 setState(() {
@@ -604,8 +625,6 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
                             ),
                           ),
                         ),
-
-
 
                       ],
                     ),

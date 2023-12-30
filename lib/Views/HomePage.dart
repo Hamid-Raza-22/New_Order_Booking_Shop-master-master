@@ -402,14 +402,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Text(
-                  //   'Date: ${_getFormattedDate()}', // Add this line
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 16.0,
-                  //   ),
-                  // ),
-                  // SizedBox(height: 10),
                   Text(
                     'Timer: ${_formatDuration(secondsPassed.toString())}',
                     style: TextStyle(
@@ -417,14 +409,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                       fontSize: 16.0,
                     ),
                   ),
-
-                  // SizedBox(height: 10),
-                  // Text(
-                  //   ' Time: ${_getFormattedtime()}',
-                  //   style: TextStyle(
-                  //     fontSize: 16.0,
-                  //   ),
-                  // ),
                 ],
               ),
               PopupMenuButton<int>(
@@ -433,14 +417,17 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                 onSelected: (value) async {
                   switch (value) {
                     case 1:
+                    // Show a loading indicator for 4 seconds
+                      showLoadingIndicator(context);
+                      await Future.delayed(Duration(seconds: 4));
 
-                      DatabaseOutputs outputs = DatabaseOutputs();
-                      outputs.checkFirstRun();
+                      // After 4 seconds, hide the loading indicator and perform the refresh logic
+                      Navigator.of(context, rootNavigator: true).pop(); // Pop the loading dialog
+                      // Add your logic for refreshing here
+                      break;
 
                     case 2:
-                    // Handle the action for the second menu item
-                    // Add more cases for other menu items if needed
-// Log Out logic
+                    // Handle the action for the second menu item (Log Out)
                       if (isClockedIn) {
                         // Check if the user is clocked in
                         Fluttertoast.showToast(
@@ -460,10 +447,8 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                             builder: (context) => LoginForm(),
                           ),
                         );
-
                       }
                       break;
-                  // Add more cases for other menu items as needed
                   }
                 },
                 itemBuilder: (BuildContext context) {
@@ -471,17 +456,11 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                     PopupMenuItem<int>(
                       value: 1,
                       child: Text('Refresh'),
-
                     ),
                     PopupMenuItem<int>(
                       value: 2,
                       child: Text('Log Out'),
                     ),
-                    // PopupMenuItem<int>(
-                    //   value: 3,
-                    //   child: Text('Option 3'),
-                    // ),
-                    // Add more PopupMenuItems as needed
                   ];
                 },
               ),
@@ -845,6 +824,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       print(e);
     }
   }
+
   Future<void> _listenLocation() async {
     gpx = new Gpx();
     track = new Trk();
@@ -978,6 +958,23 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
     setState(() {
       _locationSubscription = null;
     });
+  }
+  void showLoadingIndicator(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Refreshing..."),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   //delete document

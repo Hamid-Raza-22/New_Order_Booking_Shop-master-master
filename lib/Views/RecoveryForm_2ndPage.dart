@@ -11,11 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:pdf/pdf.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:pdf/pdf.dart' as pdfLib;
-import 'package:flutter/services.dart';
-import 'package:flutter/services.dart' show rootBundle;
-
-
 
 class RecoveryForm_2ndPage extends StatelessWidget {
   final Map<String, dynamic> formData;
@@ -28,80 +23,85 @@ class RecoveryForm_2ndPage extends StatelessWidget {
     String shopName = formData['shopName'];
     String cashRecovery = formData['cashRecovery'];
     String netBalance = formData['netBalance'];
-    print(netBalance);
+    print('NetBalance: $netBalance');
     print('cashRecovery: $cashRecovery');
 
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16.0),
-              children: <Widget>[
-                buildTextFieldRow('Receipt:', recoveryId),
-                buildTextFieldRow('Date:', date),
-                buildTextFieldRow('Shop Name:', shopName),
-                buildTextFieldRow('Payment Amount:', cashRecovery),
-                buildTextFieldRow('Net Balance:', netBalance),
-                //buildTextFieldRow('Booker Name:', userNames),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: 80,
-                    height: 30,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        generateAndSharePDF(
-                            recoveryId, date, shopName, cashRecovery, netBalance);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(color: Colors.green),
-                        ),
-                        elevation: 8.0,
-                      ),
-                      child: Text('PDF', style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: 100,
-                    height: 30,
-                    margin: EdgeInsets.only(right: 16, bottom: 16),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(),
+    return WillPopScope(
+      onWillPop: () async {
+        // Return false to prevent the user from navigating back
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(''),
+          automaticallyImplyLeading: false, // Remove back arrow
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: <Widget>[
+                  buildTextFieldRow('Receipt:', recoveryId),
+                  buildTextFieldRow('Date:', date),
+                  buildTextFieldRow('Shop Name:', shopName),
+                  buildTextFieldRow('Payment Amount:', cashRecovery),
+                  buildTextFieldRow('Net Balance:', netBalance),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      width: 80,
+                      height: 30,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          generateAndSharePDF(
+                              recoveryId, date, shopName, cashRecovery, netBalance);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            side: BorderSide(color: Colors.green),
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(color: Colors.green),
+                          elevation: 8.0,
                         ),
-                        elevation: 8.0,
+                        child: Text('PDF', style: TextStyle(color: Colors.white)),
                       ),
-                      child: Text('Close', style: TextStyle(color: Colors.white)),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      margin: EdgeInsets.only(right: 16, bottom: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            side: BorderSide(color: Colors.green),
+                          ),
+                          elevation: 8.0,
+                        ),
+                        child: Text('Close', style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -186,7 +186,7 @@ class RecoveryForm_2ndPage extends StatelessWidget {
               crossAxisAlignment: pw.CrossAxisAlignment.center, // Align date to bottom
               mainAxisAlignment: pw.MainAxisAlignment.center, // Date on right side
               children: [
-                pw.Text('Recovery Invoice', style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold,))
+                pw.Text('Recovery Slip', style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold,))
               ],
             ),
             pw.SizedBox(height: 20),
@@ -258,14 +258,13 @@ class RecoveryForm_2ndPage extends StatelessWidget {
               ],
             ),
 
-
             // Footer with margin
             pw.Container(
               margin: const pw.EdgeInsets.only(top: 80.0, bottom: 20.0), // Add top and bottom margin
               child: pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
-                  pw.Text('Developed by B5Tech', style: pw.TextStyle(fontSize: 12)),
+                  pw.Text('Developed by MetaXperts', style: pw.TextStyle(fontSize: 12)),
                 ],
               ),
             ),
@@ -284,5 +283,4 @@ class RecoveryForm_2ndPage extends StatelessWidget {
     // Share the PDF
     await Share.shareFiles([output.path], text: 'PDF Document');
     }
-
 }
