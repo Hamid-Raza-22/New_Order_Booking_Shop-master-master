@@ -1113,6 +1113,7 @@ class StockCheckItemRow extends StatelessWidget {
                 child: TypeAheadFormField<ProductsModel>(
                   textFieldConfiguration: TextFieldConfiguration(
                     decoration: InputDecoration(
+
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
