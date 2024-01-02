@@ -4,6 +4,7 @@ import 'package:order_booking_shop/API/DatabaseOutputs.dart';
 import 'package:order_booking_shop/Databases/DBlogin.dart';
 import 'package:order_booking_shop/Views/HomePage.dart';
 import 'package:order_booking_shop/Views/ShopListPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../API/Globals.dart';
 import '../Models/loginModel.dart';
 
@@ -27,6 +28,16 @@ class _LoginFormState extends State<LoginForm> {
   final dblogin = DBHelperLogin();
 
   _login() async {
+    bool isLoggedIn = await _checkLoginStatus();
+
+    if (isLoggedIn) {
+      // User is already logged in, navigate to the home page directly
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      return;
+    }
     var response = await dblogin.login(
       Users(user_id: _emailController.text, password: _passwordController.text, user_name: ''),
     );
@@ -46,7 +57,22 @@ class _LoginFormState extends State<LoginForm> {
       userCitys = userCity!;
       userId = _emailController.text;
       print(userId);
+
+      // Store the user ID in shared preferences after a successful login
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId', userId);
       // Call the new method to fetch shop names based on the user's ID and city
+
+      // Check if it's the first login
+     // bool isFirstLogin = await _checkFirstLogin();
+
+      // if (isFirstLogin) {
+      //   // Perform actions only for the first login
+      //   // ...
+      //
+      //   // Set isFirstLogin to false
+      //   _setFirstLoginStatus(false);
+      // }
 
       Fluttertoast.showToast(msg: "Successfully logged in", toastLength: Toast.LENGTH_LONG);
 
@@ -67,6 +93,18 @@ class _LoginFormState extends State<LoginForm> {
       Fluttertoast.showToast(msg: "Failed login", toastLength: Toast.LENGTH_LONG);
     }
   }
+  Future<bool> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    return userId != null && userId.isNotEmpty;
+  }
+
+
+  void _setFirstLoginStatus(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isFirstLogin', value);
+  }
+
 
   @override
   Widget build(BuildContext context) {

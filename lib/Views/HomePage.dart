@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:nanoid/nanoid.dart';
 import 'package:order_booking_shop/API/Globals.dart';
 import 'package:order_booking_shop/Databases/OrderDatabase/DBProductCategory.dart';
 import 'package:order_booking_shop/Models/AttendanceModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../API/DatabaseOutputs.dart';
 import '../View_Models/AttendanceViewModel.dart';
 import 'login.dart';
@@ -16,6 +18,12 @@ import 'RecoveryFormPage.dart';
 import 'ReturnFormPage.dart';
 import 'ShopPage.dart';
 import 'ShopVisit.dart';
+import 'package:order_booking_shop/Databases/DBHelper.dart';
+import 'package:order_booking_shop/Databases/DBHelperRecoveryForm.dart';
+import 'package:order_booking_shop/Databases/DBHelperReturnForm.dart';
+import 'package:order_booking_shop/Databases/OrderDatabase/DBHelperOrderMaster.dart';
+
+import '../Databases/DBHelperShopVisit.dart';
 import '../Databases/OrderDatabase/DBHelperOwner.dart';
 //tracker
 import 'dart:async';
@@ -95,8 +103,15 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
   DBHelperOwner dbHelper = DBHelperOwner();
   //tracker
   final loc.Location location = loc.Location();
+  loc.LocationAccuracy accuracy=loc.LocationAccuracy.high;
   StreamSubscription<loc.LocationData>? _locationSubscription;
-
+// Function to clear SharedPreferences and perform any additional logout logic
+  Future<void> _logOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Clear the user ID or any other relevant data from SharedPreferences
+    prefs.remove('userId');
+    // Add any additional logout logic here
+  }
   Future<bool> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
     return permission == LocationPermission.always ||
@@ -418,6 +433,9 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                   switch (value) {
                     case 1:
 
+                      await backgroundTask();
+                      await postFile();
+
                     DatabaseOutputs outputs = DatabaseOutputs();
                     outputs.checkFirstRun();
                     // Show a loading indicator for 4 seconds
@@ -443,6 +461,8 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                           fontSize: 16.0,
                         );
                       } else {
+                        await _logOut(); // Call the function to log out
+
                         // If the user is not clocked in, proceed with logging out
                         Navigator.pushReplacement(
                           // Replace the current page with the login page
@@ -980,6 +1000,101 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       },
     );
   }
+
+
+  Future<bool> isInternetConnected() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi;
+
+    print('Internet Connected: $isConnected');
+
+    return isConnected;
+  }
+
+  Future<void> backgroundTask() async {
+    try {
+      bool isConnected = await isInternetConnected();
+
+      if (isConnected) {
+        print('Internet connection is available. Initiating background data synchronization.');
+        await synchronizeData();
+        print('Background data synchronization completed.');
+      } else {
+        print('No internet connection available. Skipping background data synchronization.');
+      }
+    } catch (e) {
+      print('Error in backgroundTask: $e');
+    }
+  }
+
+  Future<void> synchronizeData() async {
+    print('Synchronizing data in the background.');
+
+    await postAttendanceTable();
+    await postAttendanceOutTable();
+    await postShopTable();
+    await postShopVisitData();
+    await postStockCheckItems();
+    await postMasterTable();
+    await postOrderDetails();
+    await postReturnFormTable();
+    await postReturnFormDetails();
+    await postRecoveryFormTable();
+  }
+
+  Future<void> postShopVisitData() async {
+    DBHelperShopVisit dbHelper = DBHelperShopVisit();
+    await dbHelper.postShopVisitData();
+  }
+
+  Future<void> postStockCheckItems() async {
+    DBHelperShopVisit dbHelper = DBHelperShopVisit();
+    await dbHelper.postStockCheckItems();
+  }
+
+  Future<void> postAttendanceOutTable() async {
+    DBHelperProductCategory dbHelper = DBHelperProductCategory();
+    await dbHelper.postAttendanceOutTable();
+  }
+
+  Future<void> postAttendanceTable() async {
+    DBHelperProductCategory dbHelper = DBHelperProductCategory();
+    await dbHelper.postAttendanceTable();
+  }
+
+  Future<void> postMasterTable() async {
+    DBHelperOrderMaster dbHelper = DBHelperOrderMaster();
+    await dbHelper.postMasterTable();
+  }
+
+  Future<void> postOrderDetails() async {
+    DBHelperOrderMaster dbHelper = DBHelperOrderMaster();
+    await dbHelper.postOrderDetails();
+  }
+
+  Future<void> postShopTable() async {
+    DBHelper dbHelper = DBHelper();
+    await dbHelper.postShopTable();
+  }
+
+  Future<void> postReturnFormTable() async {
+    print('Attempting to post Return data');
+    DBHelperReturnForm dbHelper = DBHelperReturnForm();
+    await dbHelper.postReturnFormTable();
+    print('Return data posted successfully');
+  }
+
+  Future<void> postReturnFormDetails() async {
+    DBHelperReturnForm dbHelper = DBHelperReturnForm();
+    await dbHelper.postReturnFormDetails();
+  }
+
+  Future<void> postRecoveryFormTable() async {
+    DBHelperRecoveryForm dbHelper = DBHelperRecoveryForm();
+    await dbHelper.postRecoveryFormTable();
+  }
+
 
   //delete document
   _deleteDocument() async {

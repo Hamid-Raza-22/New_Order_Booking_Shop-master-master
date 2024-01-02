@@ -66,6 +66,7 @@ dependencies:
   connectivity: ^3.0.6
   cloudinary_public: ^0.23.1
   cloudinary_flutter: ^1.2.0
+  connectivity_plus: ^5.0.2
   cloudinary: ^1.2.0
   modal_progress_hud_nsn: ^0.4.0
   cloud_functions: ^4.5.8
@@ -81,6 +82,7 @@ dependencies:
   file_picker: ^6.1.1
   intl: ^0.19.0
   flutter_image_compress: ^2.1.0
+  workmanager: ^0.5.2
 
 
 
