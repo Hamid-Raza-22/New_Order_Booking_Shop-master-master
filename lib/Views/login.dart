@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:order_booking_shop/API/DatabaseOutputs.dart';
 import 'package:order_booking_shop/Databases/DBlogin.dart';
 import 'package:order_booking_shop/Views/HomePage.dart';
 import 'package:order_booking_shop/Views/ShopListPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../API/Globals.dart';
 import '../Models/loginModel.dart';
 
@@ -29,25 +27,6 @@ class _LoginFormState extends State<LoginForm> {
   final dblogin = DBHelperLogin();
 
   _login() async {
-
-    // bool isLoggedIn = await _checkLoginStatus();
-    // if (isLoggedIn) {
-    //   Map<String, dynamic> dataToPass = {
-    //
-    //     'userName': userNames
-    //
-    //   };
-    //   // User is already logged in, navigate to the home page directly
-    //   Navigator.of(context).push(
-    //     MaterialPageRoute(
-    //         builder: (context) => HomePage(),
-    //         settings: RouteSettings(arguments: dataToPass)
-    //     ),
-    //   );
-    //   return;
-    // }
-
-
     var response = await dblogin.login(
       Users(user_id: _emailController.text, password: _passwordController.text, user_name: ''),
     );
@@ -68,8 +47,6 @@ class _LoginFormState extends State<LoginForm> {
       userId = _emailController.text;
       print(userId);
       // Call the new method to fetch shop names based on the user's ID and city
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userId', userId);
 
       Fluttertoast.showToast(msg: "Successfully logged in", toastLength: Toast.LENGTH_LONG);
 
@@ -90,15 +67,6 @@ class _LoginFormState extends State<LoginForm> {
       Fluttertoast.showToast(msg: "Failed login", toastLength: Toast.LENGTH_LONG);
     }
   }
-
-  Future<bool> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userId = prefs.getString('userId');
-    String? userCity = prefs.getString('userCitys');
-    String? userName = prefs.getString('userNames');
-    return userId != null && userId.isNotEmpty && userCity != null && userCity.isNotEmpty  && userName != null && userName.isNotEmpty;
-  }
-
 
   @override
   Widget build(BuildContext context) {

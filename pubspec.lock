@@ -9,6 +9,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.16"
+  android_alarm_manager_plus:
+    dependency: "direct main"
+    description:
+      name: android_alarm_manager_plus
+      sha256: "84720c8ad2758aabfbeafd24a8c355d8c8dd3aa52b01eaf3bb827c7210f61a91"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.4"
+  android_intent_plus:
+    dependency: "direct main"
+    description:
+      name: android_intent_plus
+      sha256: e1c62bb41c90e15083b7fb84dc327fe90396cc9c1445b55ff1082144fabfb4d9
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
   archive:
     dependency: transitive
     description:
@@ -241,22 +257,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  connectivity_plus:
-    dependency: "direct main"
-    description:
-      name: connectivity_plus
-      sha256: "224a77051d52a11fbad53dd57827594d3bd24f945af28bd70bab376d68d437f0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.2"
-  connectivity_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: connectivity_plus_platform_interface
-      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.4"
   convert:
     dependency: transitive
     description:
@@ -305,6 +305,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.10"
+  device_info_plus:
+    dependency: "direct main"
+    description:
+      name: device_info_plus
+      sha256: "0042cb3b2a76413ea5f8a2b40cec2a33e01d0c937e91f0f7c211fde4f7739ba6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.1.1"
+  device_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_plus_platform_interface
+      sha256: d3b01d5868b50ae571cd1dc6e502fc94d956b665756180f7b16ead09e836fd64
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   dio:
     dependency: transitive
     description:
@@ -470,6 +486,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  flutter_background_service:
+    dependency: "direct main"
+    description:
+      name: flutter_background_service
+      sha256: "94d9a143852729140e17254a53769383b03738cd92b6e588a8762003e6cd9dd9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.5"
+  flutter_background_service_android:
+    dependency: "direct main"
+    description:
+      name: flutter_background_service_android
+      sha256: "30863ebafd8214b8e76d5e5c9f27887dc5cc303fcf3e89f71534f621fc486782"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.2"
+  flutter_background_service_ios:
+    dependency: transitive
+    description:
+      name: flutter_background_service_ios
+      sha256: ab73657535876e16abc89e40f924df3e92ad3dee83f64d187081417e824709ed
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
+  flutter_background_service_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_background_service_platform_interface
+      sha256: cd5720ff5b051d551a4734fae16683aace779bd0425e8d3f15d84a0cdcc2d8d9
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -582,6 +630,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      sha256: "892ada16046d641263f30c72e7432397088810a84f34479f6677494802a2b535"
+      url: "https://pub.dev"
+    source: hosted
+    version: "16.3.0"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: "33f741ef47b5f63cc7f78fe75eeeac7e19f171ff3c3df054d84c1e38bedb6a03"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0+1"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "7cf643d6d5022f3baed0be777b0662cce5919c0a7b86e700299f22dc4ae660ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -856,6 +928,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
+  isolate:
+    dependency: "direct main"
+    description:
+      name: isolate
+      sha256: "3554ab10fdeec965d27e0074c913ccb2229887633da080d2b35a6322da14938b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   js:
     dependency: transitive
     description:
@@ -968,14 +1048,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
   octo_image:
     dependency: transitive
     description:
@@ -1453,6 +1525,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  win32_registry:
+    dependency: transitive
+    description:
+      name: win32_registry
+      sha256: "41fd8a189940d8696b1b810efb9abcf60827b6cbfab90b0c43e8439e3a39d85a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   workmanager:
     dependency: "direct main"
     description:

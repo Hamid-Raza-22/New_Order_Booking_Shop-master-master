@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:isolate/isolate.dart';
+
 import 'package:order_booking_shop/API/Globals.dart';
 import 'package:order_booking_shop/Databases/OrderDatabase/DBProductCategory.dart';
 import 'package:order_booking_shop/Models/AttendanceModel.dart';
@@ -154,22 +154,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
   }
 
 
-  Future<void> _loadButtonState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      // Load the button state from SharedPreferences
-      isClockedIn = prefs.getBool('isClockedIn') ?? false;
-    });
-  }
-
   Future<void> _toggleClockInOut() async {
-    // Your toggle logic here...
-
-    // Save the updated button state to SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isClockedIn', isClockedIn);
-
-
     Completer<void> completer = Completer<void>();
 
 
@@ -291,7 +276,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
     }
     _getFormattedDate();
     // _getFormattedTime();
-    _loadButtonState();
   }
   String _getFormattedtime() {
     final now = DateTime.now();
@@ -807,12 +791,8 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
             child:ElevatedButton.icon(
-              onPressed: () async {
-                // Run _toggleClockInOut in the background
-                await Future<void>.microtask(() async {
-                  await _toggleClockInOut();
-                });
-              },
+              onPressed: _toggleClockInOut,
+
               icon: Icon(
                 isClockedIn ? Icons.timer_off : Icons.timer,
                 color: isClockedIn ? Colors.red : Colors.green,
@@ -828,8 +808,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-            )
-
+            ),
 
           ),
         ),
