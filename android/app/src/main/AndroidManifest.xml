@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:label="Courage ERP"
         android:name="${applicationName}"
@@ -38,6 +39,40 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <receiver android:name="io.flutter.plugins.androidalarmmanager.AlarmBroadcastReceiver"
+            android:exported="false"/>
+        <service
+            android:name="com.ryanheise.backgroundservice.BackgroundService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false"/>
+
+        <service
+            android:name="com.aafdev.my_loc.LocationForegroundService"
+            android:foregroundServiceType="location"
+            />
+
+        <service
+            android:name="com.aafdev.my_loc.MediaProjectionForegroundService"
+            android:foregroundServiceType="mediaProjection"
+            />
+
+        <service
+            android:name="com.aafdev.my_loc.CameraForegroundService"
+            android:foregroundServiceType="camera"
+            />
+
+        <service
+            android:name="com.aafdev.my_loc.ConnectedDeviceForegroundService"
+            android:foregroundServiceType="connectedDevice"
+            />
+
+        <service
+            android:name="com.aafdev.my_loc.DataSyncForegroundService"
+            android:foregroundServiceType="dataSync"
+            />
+
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
