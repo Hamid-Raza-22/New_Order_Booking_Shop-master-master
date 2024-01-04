@@ -197,6 +197,7 @@ class _ShopVisitState extends State<ShopVisit> {
     shopOwners = (await dbHelper.getOwnersDB())!;
     setState(() {
       // Explicitly cast each element to String
+
       dropdownItems = shopNames.map((dynamic item) => item.toString()).toSet().toList();
     });
   }
@@ -1113,6 +1114,7 @@ class StockCheckItemRow extends StatelessWidget {
                 child: TypeAheadFormField<ProductsModel>(
                   textFieldConfiguration: TextFieldConfiguration(
                     decoration: InputDecoration(
+
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),

@@ -1,20 +1,15 @@
 import 'dart:async';
-import 'dart:isolate';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nanoid/nanoid.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:isolate/isolate.dart';
 import 'package:order_booking_shop/API/Globals.dart';
 import 'package:order_booking_shop/Databases/OrderDatabase/DBProductCategory.dart';
 import 'package:order_booking_shop/Models/AttendanceModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
 import '../API/DatabaseOutputs.dart';
 import '../View_Models/AttendanceViewModel.dart';
 import 'login.dart';
@@ -23,12 +18,13 @@ import 'RecoveryFormPage.dart';
 import 'ReturnFormPage.dart';
 import 'ShopPage.dart';
 import 'ShopVisit.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
 import 'package:order_booking_shop/Databases/DBHelper.dart';
 import 'package:order_booking_shop/Databases/DBHelperRecoveryForm.dart';
 import 'package:order_booking_shop/Databases/DBHelperReturnForm.dart';
 import 'package:order_booking_shop/Databases/OrderDatabase/DBHelperOrderMaster.dart';
+
 import '../Databases/DBHelperShopVisit.dart';
+import '../Databases/OrderDatabase/DBHelperOwner.dart';
 //tracker
 import 'dart:async';
 import 'dart:convert';
@@ -73,17 +69,10 @@ class MyIcons {
   static const IconData orderBookingStatus = IconData(0xf52a, fontFamily: 'MaterialIcons');
 }
 
-
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await SharedPreferences.getInstance();
-
   runApp(MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -108,28 +97,21 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
   List<String> shopList = [];
   String? selectedShop2;
   int? attendanceId;
-  late Isolate _isolate;
   int? attendanceId1;
   double? globalLatitude1;
   double? globalLongitude1;
   DBHelperOwner dbHelper = DBHelperOwner();
   //tracker
   final loc.Location location = loc.Location();
+  loc.LocationAccuracy accuracy=loc.LocationAccuracy.high;
   StreamSubscription<loc.LocationData>? _locationSubscription;
-
-  // Add a method to save the clock-in status to SharedPreferences
-  // void _saveClockInStatus(bool isClockedIn) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('isClockedIn', isClockedIn);
-  // }
-
+// Function to clear SharedPreferences and perform any additional logout logic
   Future<void> _logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // Clear the user ID or any other relevant data from SharedPreferences
     prefs.remove('userId');
     // Add any additional logout logic here
   }
-
   Future<bool> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
     return permission == LocationPermission.always ||
@@ -153,23 +135,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
     }
   }
 
-
-  Future<void> _loadButtonState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      // Load the button state from SharedPreferences
-      isClockedIn = prefs.getBool('isClockedIn') ?? false;
-    });
-  }
-
   Future<void> _toggleClockInOut() async {
-    // Your toggle logic here...
-
-    // Save the updated button state to SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isClockedIn', isClockedIn);
-
-
     Completer<void> completer = Completer<void>();
 
 
@@ -206,8 +172,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       return completer.future;
     }
 
-
-
     var id = await customAlphabet('1234567890', 10);
     await _getCurrentLocation();
 
@@ -215,7 +179,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       isClockedIn = !isClockedIn;
 
       if (isClockedIn) {
-
         attendanceViewModel.addAttendance(AttendanceModel(
           id: int.parse(id),
           timeIn: _getFormattedtime(),
@@ -233,9 +196,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
 
         DBHelperProductCategory dbmaster = DBHelperProductCategory();
         dbmaster.postAttendanceTable();
-
       } else {
-
         attendanceViewModel.addAttendanceOut(AttendanceOutModel(
           id: int.parse(id),
           timeOut: _getFormattedtime(),
@@ -288,10 +249,11 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
     location.enableBackgroundMode(enable: true);
     if(isClockedIn){
       _clockrefresh();
+
+
     }
     _getFormattedDate();
     // _getFormattedTime();
-    _loadButtonState();
   }
   String _getFormattedtime() {
     final now = DateTime.now();
@@ -329,8 +291,6 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
     });
     return totalTime;
   }
-
-
 
   String _formatDuration(String secondsString) {
     int seconds = int.parse(secondsString);
@@ -472,12 +432,11 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                 onSelected: (value) async {
                   switch (value) {
                     case 1:
+
                       await backgroundTask();
                       await postFile();
 
-
-
-                      DatabaseOutputs outputs = DatabaseOutputs();
+                    DatabaseOutputs outputs = DatabaseOutputs();
                     outputs.checkFirstRun();
                     // Show a loading indicator for 4 seconds
                       showLoadingIndicator(context);
@@ -807,12 +766,46 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
             child:ElevatedButton.icon(
-              onPressed: () async {
-                // Run _toggleClockInOut in the background
-                await Future<void>.microtask(() async {
-                  await _toggleClockInOut();
-                });
-              },
+              onPressed: _toggleClockInOut,
+              // onPressed: () {
+              //   setState(() async {
+              //     _isClockedIn = !_isClockedIn;
+              //     if (_isClockedIn) {
+              //       // Code for clocking in
+              //       var id = await customAlphabet('1234567890', 10);
+              //       attendanceViewModel.addAttendance(AttendanceModel(
+              //         id: int.parse(id),
+              //         timeIn: _getFormattedtime(),
+              //         date: _getFormattedDate(),
+              //         userId: userId.toString(),
+              //         latIn: globalLatitude1,
+              //         lngIn: globalLongitude1,
+              //       ));
+              //       _startTimer();
+              //
+              //       DBHelperProductCategory dbmaster = DBHelperProductCategory();
+              //       await dbmaster.postAttendanceTable();
+              //       // Start the timer when clocking in
+              //     } else {
+              //       // Code for clocking out
+              //       var id = await customAlphabet('1234567890', 10);
+              //       attendanceViewModel.addAttendanceOut(AttendanceOutModel(
+              //           id: int.parse(id),
+              //         timeOut: _getFormattedtime(),
+              //         date: _getFormattedDate(),
+              //         userId: userId.toString(),
+              //         latOut: globalLatitude1,
+              //         lngOut: globalLongitude1,
+              //       ));
+              //
+              //       DBHelperProductCategory dbmaster = DBHelperProductCategory();
+              //       await dbmaster.postAttendanceOutTable();
+              //       _stopTimer();
+              //       // Stop the timer when clocking out
+              //     }
+              //     _getCurrentLocation(); // Capture location when clocking in or out
+              //   });
+              // },
               icon: Icon(
                 isClockedIn ? Icons.timer_off : Icons.timer,
                 color: isClockedIn ? Colors.red : Colors.green,
@@ -828,8 +821,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-            )
-
+            ),
 
           ),
         ),
@@ -1008,6 +1000,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       },
     );
   }
+
 
   Future<bool> isInternetConnected() async {
     var connectivityResult = await Connectivity().checkConnectivity();
