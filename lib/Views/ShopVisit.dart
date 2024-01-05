@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -132,20 +133,23 @@ class _ShopVisitState extends State<ShopVisit> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-         latitude  = position.latitude ;
-       longitude = position.longitude ;
 
-
-
+      double latitude = position.latitude;
+      double longitude = position.longitude;
 
       print('Latitude: $latitude, Longitude: $longitude');
 
-      // Now you can use 'latitude' and 'longitude' variables as needed.
-    } catch (e) {
-      print('Error getting location: $e');
-    }
-  }
+      // Using geocoding to convert latitude and longitude to an address
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      Placemark currentPlace = placemarks[0];
 
+      String address = "${currentPlace.thoroughfare}, ${currentPlace.subLocality}, ${currentPlace.locality}, ${currentPlace.postalCode}, ${currentPlace.country}";
+
+      print('Address is: $address');
+    } catch (e) {
+      print('Error getting location:$e');
+    }
+    }
 
   _loadCounter() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();

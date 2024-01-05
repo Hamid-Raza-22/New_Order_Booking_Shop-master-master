@@ -25,7 +25,7 @@ class DBOrderMasterGet {
   _onCreate(Database db, int version) async {
    await db.execute("CREATE TABLE orderMasterData(order_no TEXT, shop_name TEXT, user_id TEXT)");
    await  db.execute("CREATE TABLE orderDetailsData(order_no TEXT, product_name TEXT, quantity_booked INTEGER)");
-   await db.execute("CREATE TABLE orderBookingStatusData(order_no TEXT, status TEXT, order_date TEXT, shop_name TEXT, amount TEXT)");
+   await db.execute("CREATE TABLE orderBookingStatusData(order_no TEXT, status TEXT, order_date TEXT, shop_name TEXT, amount TEXT, user_id TEXT)");
    await db.execute("CREATE TABLE netBalance(shop_name TEXT, debit TEXT,credit TEXT)");
    await db.execute("CREATE TABLE accounts(account_id INTEGER, shop_name TEXT, order_date TEXT, credit TEXT, booker_name TEXT)");
   }
@@ -180,7 +180,7 @@ class DBOrderMasterGet {
   Future<List<Map<String, dynamic>>?> getOrderBookingStatusDB() async {
     final Database db = await initDatabase();
     try {
-      final List<Map<String, dynamic>> orderbookingstatus = await db.query('orderBookingStatusData');
+      final List<Map<String, dynamic>> orderbookingstatus = await db.query('orderBookingStatusData', where: 'user_id = ?', whereArgs: [userId]);
       return  orderbookingstatus;
     } catch (e) {
       print("Error retrieving products: $e");
@@ -221,6 +221,16 @@ class DBOrderMasterGet {
     }
   }
 
+  Future<List<String>> getOrderMasterOrderNo() async {
+    final Database db = await initDatabase();
+    try {
+      final List<Map<String, dynamic>> orderNo = await db.query('orderMasterData', where: 'user_id = ?', whereArgs: [userId]);
+      return orderNo.map((map) => map['order_no'] as String).toList();
+    } catch (e) {
+      print("Error retrieving order no: $e");
+      return [];
+    }
+  }
 
   //
   // Future<List<String>> getShopNamesForCity(String userCity) async {

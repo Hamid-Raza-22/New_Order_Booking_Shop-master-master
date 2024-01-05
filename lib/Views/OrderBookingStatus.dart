@@ -81,14 +81,34 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
     });
   }
 
+  // void fetchOrderNumbers() async {
+  //   List<Map<String, dynamic>> orderNumbers =
+  //       await dbHelper.getOrderBookingStatusDB() ?? [];
+  //   setState(() {
+  //     dropdownItems2 =
+  //         orderNumbers.map((map) => map['order_no'].toString()).toSet().toList();
+  //   });
+  // }
+
+
   void fetchOrderNumbers() async {
-    List<Map<String, dynamic>> orderNumbers =
-        await dbHelper.getOrderBookingStatusDB() ?? [];
+    List<String> orderNo = await dbHelper.getOrderMasterOrderNo();
+    shopOwners = (await dbHelper.getOrderMasterDB())!;
+
+    // Remove duplicates from the shopNames list
+    List<String> uniqueShopNames = orderNo!.toSet().toList();
+
     setState(() {
-      dropdownItems2 =
-          orderNumbers.map((map) => map['order_no'].toString()).toSet().toList();
+      dropdownItems2 = uniqueShopNames;
     });
   }
+
+
+
+
+
+
+
   //
   void fetchShopData() async {
     List<String> shopNames = await dbHelper.getOrderMasterShopNames();
@@ -400,7 +420,7 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
                                     ),
                                   ),
                                   suggestionsCallback: (pattern) {
-                                    return ['DISPATCHED', 'RESCHEDULE', 'CANCELED']
+                                    return ['DISPATCHED', 'RESCHEDULE', 'CANCELED', 'PENDING']
                                         .where((status) =>
                                         status.toLowerCase().contains(
                                             pattern.toLowerCase()))

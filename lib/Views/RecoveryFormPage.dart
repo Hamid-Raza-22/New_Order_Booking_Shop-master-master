@@ -50,7 +50,8 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     //fetchShopData();
     onCreatee();
     _loadCounter();
-    fetchShopNames();
+    //fetchShopNames();
+    fetchShopData();
     fetchShopNamesAndTotals();
     fetchAccountsData();
     // Add this line
@@ -194,19 +195,31 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     });
   }
 
-
-  Future<void> fetchShopNames() async {
-    DBOrderMasterGet dbHelper = DBOrderMasterGet();
-    List<String>? shopNames = await dbHelper.getShopNamesFromNetBalance();
+  void fetchShopData() async {
+    List<String> shopNames = await dbHelper.getOrderMasterShopNames();
+    shopOwners = (await dbHelper.getOrderMasterDB())!;
 
     // Remove duplicates from the shopNames list
     List<String> uniqueShopNames = shopNames!.toSet().toList();
 
     setState(() {
       dropdownItems = uniqueShopNames;
-      // selectedDropdownValue = uniqueShopNames.isNotEmpty ? uniqueShopNames[0] : null;
     });
   }
+
+
+  // Future<void> fetchShopNames() async {
+  //   DBOrderMasterGet dbHelper = DBOrderMasterGet();
+  //   List<String>? shopNames = await dbHelper.getShopNamesFromNetBalance();
+  //
+  //   // Remove duplicates from the shopNames list
+  //   List<String> uniqueShopNames = shopNames!.toSet().toList();
+  //
+  //   setState(() {
+  //     dropdownItems = uniqueShopNames;
+  //     // selectedDropdownValue = uniqueShopNames.isNotEmpty ? uniqueShopNames[0] : null;
+  //   });
+  // }
 
 
   String getCurrentDate() {
