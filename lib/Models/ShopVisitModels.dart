@@ -17,6 +17,7 @@ class ShopVisitModel {
   String? feedback;
   dynamic? latitude;
   dynamic? longitude;
+  dynamic? address;
 
   ShopVisitModel({
 
@@ -33,7 +34,8 @@ class ShopVisitModel {
     this.body,
     this.feedback,
     this.longitude,
-    this.latitude
+    this.latitude,
+    this.address
   });
 
   factory ShopVisitModel.fromMap(Map<dynamic, dynamic> json) {
@@ -53,7 +55,8 @@ class ShopVisitModel {
             : null,
         feedback: json['feedback'],
       longitude: json['longitude'],
-      latitude: json['latitude']
+      latitude: json['latitude'],
+      address: json['address'],
     );
   }
 
@@ -72,7 +75,8 @@ class ShopVisitModel {
     'productReviewed': productReviewed,
     'body':  body != null ? base64Encode(body!) : null, 'feedback': feedback,
       'latitude':latitude,
-      'longitude': longitude// Add this line to store the imagePath in the database
+      'longitude': longitude,
+      'address': address
      };
     }
 }

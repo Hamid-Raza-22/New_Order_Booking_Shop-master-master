@@ -143,9 +143,10 @@ class _ShopVisitState extends State<ShopVisit> {
       List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
       Placemark currentPlace = placemarks[0];
 
-      String address = "${currentPlace.thoroughfare}, ${currentPlace.subLocality}, ${currentPlace.locality}, ${currentPlace.postalCode}, ${currentPlace.country}";
+      String address1 = "${currentPlace.thoroughfare}, ${currentPlace.subLocality}, ${currentPlace.locality}, ${currentPlace.postalCode}, ${currentPlace.country}";
+      address = address1;
 
-      print('Address is: $address');
+      print('Address is: $address1');
     } catch (e) {
       print('Error getting location:$e');
     }
@@ -750,9 +751,10 @@ class _ShopVisitState extends State<ShopVisit> {
                               planogram: checkboxValue2,
                               signage: checkboxValue3,
                               productReviewed: checkboxValue4,
+                              address: address,
                               body: imageBytes,
                              longitude: longitude,
-                              latitude: latitude
+                              latitude: latitude,
 
 
                             ));
@@ -898,6 +900,7 @@ class _ShopVisitState extends State<ShopVisit> {
                               planogram: checkboxValue2,
                               signage: checkboxValue3,
                               productReviewed: checkboxValue4,
+                                address: address,
                                 body: imageBytes,
                               latitude: latitude,
                               longitude: longitude

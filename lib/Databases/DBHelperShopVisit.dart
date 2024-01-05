@@ -48,7 +48,8 @@ class DBHelperShopVisit {
         body BLOB,
         feedback TEXT,
         latitude TEXT,
-        longitude TEXT
+        longitude TEXT,
+        address TEXT
       )
     ''');
 
@@ -218,7 +219,8 @@ class DBHelperShopVisit {
           productReviewed: i['productReviewed'].toString(),
             feedback: i['feedback'].toString(),
             latitude: i['latitude'].toString(),
-            longitude: i['longitude'].toString(),
+          longitude: i['longitude'].toString(),
+          address: i['address'].toString(),
           body: i['body'] != null && i['body'].toString().isNotEmpty
               ? Uint8List.fromList(base64Decode(i['body'].toString()))
               : Uint8List(0),
