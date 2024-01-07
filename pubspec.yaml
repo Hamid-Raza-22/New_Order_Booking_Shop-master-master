@@ -90,6 +90,7 @@ dependencies:
   device_info_plus: ^9.1.1
   isolate: ^2.1.1
   geocoding: ^2.1.1
+  move_to_background: ^1.0.2
 
 
 

@@ -45,11 +45,12 @@ class DBHelperShopVisit {
         planogram TEXT,
         signage TEXT,
         productReviewed TEXT,
-        body BLOB,
         feedback TEXT,
         latitude TEXT,
         longitude TEXT,
-        address TEXT
+        address TEXT,
+        body BLOB,
+        
       )
     ''');
 
@@ -85,7 +86,7 @@ class DBHelperShopVisit {
     final db = await _db;
     try {
       if (db != null) {
-        String query = 'SELECT id, date, shopName, userId, bookerName, brand, walkthrough, planogram, signage, productReviewed, body, feedback, latitude, longitude FROM shopVisit';
+        String query = 'SELECT id, date, shopName, userId, bookerName, brand, walkthrough, planogram, signage, productReviewed, feedback, latitude, longitude, address, body FROM shopVisit';
 
         // Add LIMIT and OFFSET only if specified
         if (limit > 0) {

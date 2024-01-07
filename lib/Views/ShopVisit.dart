@@ -133,9 +133,12 @@ class _ShopVisitState extends State<ShopVisit> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+         latitude  = position.latitude ;
+       longitude = position.longitude ;
 
-      double latitude = position.latitude;
-      double longitude = position.longitude;
+
+      // double latitude = position.latitude;
+      // double longitude = position.longitude;
 
       print('Latitude: $latitude, Longitude: $longitude');
 
@@ -143,7 +146,7 @@ class _ShopVisitState extends State<ShopVisit> {
       List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
       Placemark currentPlace = placemarks[0];
 
-      String address1 = "${currentPlace.thoroughfare}, ${currentPlace.subLocality}, ${currentPlace.locality}, ${currentPlace.postalCode}, ${currentPlace.country}";
+      String address1 = "${currentPlace.thoroughfare} ${currentPlace.subLocality}, ${currentPlace.locality}${currentPlace.postalCode}, ${currentPlace.country}";
       address = address1;
 
       print('Address is: $address1');
