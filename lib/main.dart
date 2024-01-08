@@ -13,14 +13,14 @@ import 'Views/splash_screen.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 
-Future<void> main() async {
+Future<void> main()  async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
-  await FlutterBackground.initialize(androidConfig: androidConfig);
-  await FlutterBackground.enableBackgroundExecution();
+   AndroidAlarmManager.initialize();
+   FlutterBackground.initialize(androidConfig: androidConfig);
+   FlutterBackground.enableBackgroundExecution();
   // await initializeService();
 
-  await Firebase.initializeApp();
+   Firebase.initializeApp();
   runApp(
       const MaterialApp(
           debugShowCheckedModeBanner: false,

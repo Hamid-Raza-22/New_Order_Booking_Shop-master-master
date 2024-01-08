@@ -1,4 +1,5 @@
 //import 'package:order_booking_shop/Databases/DBHelper.dart';
+import 'package:order_booking_shop/Databases/DBOrderMasterGet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Databases/DBHelper.dart';
 import 'ApiServices.dart';
@@ -55,8 +56,8 @@ class DatabaseOutputs{
     final api = ApiServices();
     final db = DBHelper();
     final dbowner = DBHelper();
-    final dbordermaster= DBHelper();
-    final dborderdetails= DBHelper();
+    final dbordermaster= DBOrderMasterGet();
+    final dborderdetails= DBOrderMasterGet();
     final dbnetbalance= DBHelper();
     final dbaccounts= DBHelper();
     final dborderbookingstatus= DBHelper();
@@ -208,8 +209,8 @@ class DatabaseOutputs{
     final db = DBHelper();
     final dbowner = DBHelper();
     final dblogin=DBHelper();
-    final dbordermaster= DBHelper();
-    final dborderdetails= DBHelper();
+    final dbordermaster= DBOrderMasterGet();
+    final dborderdetails= DBOrderMasterGet();
     final dborderbookingstatus= DBHelper();
     final dbProductCategory=DBHelper();
     final dbnetbalance=DBHelper();

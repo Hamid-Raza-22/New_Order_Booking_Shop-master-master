@@ -597,7 +597,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.green,
-          toolbarHeight: 100.0,
+          toolbarHeight: 80.0,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -889,7 +889,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

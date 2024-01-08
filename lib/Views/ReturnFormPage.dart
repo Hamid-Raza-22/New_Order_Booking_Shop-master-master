@@ -4,20 +4,20 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nanoid/async.dart';
 import 'package:order_booking_shop/API/Globals.dart';
-import 'package:order_booking_shop/Databases/DBHelper.dart';
 import 'package:order_booking_shop/Models/ReturnFormDetails.dart';
 import 'package:order_booking_shop/View_Models/OrderViewModels/ReturnFormViewModel.dart';
 import 'package:sqflite/sqflite.dart';
 import '../API/DatabaseOutputs.dart';
+import '../Databases/DBHelper.dart';
+import '../Databases/DBOrderMasterGet.dart';
 import '../Models/ReturnFormModel.dart';
 import '../View_Models/OrderViewModels/ReturnFormDetailsViewModel.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'HomePage.dart';
 
 class ProductController extends GetxController {
-  final DBHelper dbHelper = DBHelper();
+  final DBOrderMasterGet dbHelper = DBOrderMasterGet();
 
   RxList<String> productNames = <String>[].obs;
 
@@ -54,7 +54,7 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
   List<Map<String, dynamic>> shopOwners = [];
   List<String> dropdownItems2 = [];
   List<Map<String, dynamic>> productOwners = [];
-  DBHelper dbHelper = DBHelper();
+  DBOrderMasterGet dbHelper = DBOrderMasterGet();
   final ProductController productController = Get.put(ProductController());
 
 
@@ -574,8 +574,8 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
 
   Future<String?> fetchQuantityForProduct(String productName) async {
     try {
-      final Database? db = await productController.dbHelper.db;
-      final List<Map<String, dynamic>> result = await db!.query(
+      final Database db = await productController.dbHelper.db;
+      final List<Map<String, dynamic>> result = await db.query(
         'orderDetailsData',
         columns: ['quantity_booked'],
         where: 'product_name = ?',

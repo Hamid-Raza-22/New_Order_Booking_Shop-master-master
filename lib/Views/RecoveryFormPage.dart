@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:order_booking_shop/API/Globals.dart';
+import 'package:order_booking_shop/Databases/DBOrderMasterGet.dart';
 import 'package:order_booking_shop/Models/RecoveryFormModel.dart';
 import 'package:order_booking_shop/View_Models/RecoveryFormViewModel.dart';
 import 'package:order_booking_shop/Views/RecoveryForm_2ndPage.dart';
@@ -32,10 +33,11 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   String? selectedDropdownValue;
   List<Map<String, dynamic>> shopOwners = [];
   DBHelper dbHelper = DBHelper();
-  int serialCounter = 1;
-  double currentBalance = 0.0;
-  String currentUserId = '';
-  String currentMonth = DateFormat('MMM').format(DateTime.now());
+  DBOrderMasterGet dbHelper1 = DBOrderMasterGet();
+  int recoveryFormSerialCounter = 1;
+  double recoveryFormCurrentBalance = 0.0;
+  String recoveryFormCurrentUserId = '';
+  String recoveryFormCurrentMonth = DateFormat('MMM').format(DateTime.now());
 
 
 
@@ -48,7 +50,8 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     _netBalanceController.text = '0'; // Assuming initial value is zero
     //fetchShopData();
     onCreatee();
-    _loadCounter();
+    _loadRecoveryFormCounter();
+
     //fetchShopNames();
     fetchShopData();
     fetchShopNamesAndTotals();
@@ -189,17 +192,17 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
 
     setState(() {
       // Update the current balance field with the calculated net balance
-      currentBalance = netBalance;
-      _currentBalanceController.text = currentBalance.toString();
+      recoveryFormCurrentBalance = netBalance;
+      _currentBalanceController.text = recoveryFormCurrentBalance.toString();
     });
   }
 
   void fetchShopData() async {
-    List<String> shopNames = await dbHelper.getOrderMasterShopNames();
-    shopOwners = (await dbHelper.getOrderMasterDB())!;
+    List<String> shopNames = await dbHelper1.getOrderMasterShopNames();
+    shopOwners = (await dbHelper1.getOrderMasterDB())!;
 
     // Remove duplicates from the shopNames list
-    List<String> uniqueShopNames = shopNames!.toSet().toList();
+    List<String> uniqueShopNames = shopNames.toSet().toList();
 
     setState(() {
       dropdownItems = uniqueShopNames;
@@ -233,42 +236,37 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     double netBalance = totalAmount - cashRecovery;
     _netBalanceController.text = netBalance.toString();
   }
-
-  _loadCounter() async {
+  _loadRecoveryFormCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      serialCounter = prefs.getInt('serialCounter') ?? 1;
-      currentMonth = prefs.getString('currentMonth') ?? currentMonth;
-      currentUserId = prefs.getString('currentUserId') ?? ''; // Add this line
+      recoveryFormSerialCounter = prefs.getInt('recoveryFormSerialCounter') ?? 1;
+      recoveryFormCurrentMonth = prefs.getString('recoveryFormCurrentMonth') ?? recoveryFormCurrentMonth;
+      recoveryFormCurrentUserId = prefs.getString('recoveryFormCurrentUserId') ?? '';
     });
   }
 
-  _saveCounter() async {
-
+  _saveRecoveryFormCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('serialCounter', serialCounter);
-    await prefs.setString('currentMonth', currentMonth);
-    await prefs.setString('currentUserId', currentUserId); // Add this line
+    await prefs.setInt('recoveryFormSerialCounter', recoveryFormSerialCounter);
+    await prefs.setString('recoveryFormCurrentMonth', recoveryFormCurrentMonth);
+    await prefs.setString('recoveryFormCurrentUserId', recoveryFormCurrentUserId);
   }
 
-
-  String generateNewOrderId(String Receipt, String userId, String currentMonth) {
-    if (this.currentUserId != userId) {
-      // Reset serial counter when the userId changes
-      serialCounter = 1;
-      this.currentUserId = userId;
+  String generateNewRecoveryFormOrderId(String Receipt, String userId, String currentMonth) {
+    if (this.recoveryFormCurrentUserId != userId) {
+      recoveryFormSerialCounter = 1;
+      this.recoveryFormCurrentUserId = userId;
     }
 
-    if (this.currentMonth != currentMonth) {
-      // Reset serial counter when the month changes
-      serialCounter = 1;
-      this.currentMonth = currentMonth;
+    if (this.recoveryFormCurrentMonth != currentMonth) {
+      recoveryFormSerialCounter = 1;
+      this.recoveryFormCurrentMonth = currentMonth;
     }
 
     String orderId =
-        "$Receipt-$userId-$currentMonth-${serialCounter.toString().padLeft(3, '0')}";
-    serialCounter++;
-    _saveCounter(); // Save the updated counter value and current month
+        "$Receipt-$userId-$currentMonth-${recoveryFormSerialCounter.toString().padLeft(3, '0')}";
+    recoveryFormSerialCounter++;
+    _saveRecoveryFormCounter();
     return orderId;
   }
 
@@ -552,10 +550,10 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
                                 // Check if validation passes
                                 if (cashRecoveryValidation == null) {
                                   // Validation passed, proceed with your submission logic
-                                  if (currentBalance > 0.0) {
+                                  if (recoveryFormCurrentBalance > 0.0) {
                                     try {
-                                      String newOrderId2 = generateNewOrderId(
-                                          Receipt, userId.toString(), currentMonth);
+                                      String newOrderId2 = generateNewRecoveryFormOrderId(
+                                          Receipt, userId.toString(), recoveryFormCurrentMonth);
 
                                       recoveryformViewModel.addRecoveryForm(
                                         RecoveryFormModel(

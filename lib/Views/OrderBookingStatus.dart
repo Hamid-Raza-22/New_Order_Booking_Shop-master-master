@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:order_booking_shop/API/Globals.dart';
+import 'package:order_booking_shop/Databases/DBOrderMasterGet.dart';
 
 import '../API/DatabaseOutputs.dart';
 import '../Databases/DBHelper.dart';
@@ -33,6 +34,8 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
   String selectedOwnerContact = '';
   List<Map<String, dynamic>> shopOwners = [];
   DBHelper dbHelper = DBHelper();
+  DBOrderMasterGet dbHelper1 = DBOrderMasterGet();
+
   String selectedOrderNoFilter = '';
   String selectedShopFilter = '';
   String selectedStatusFilter = '';
@@ -91,8 +94,8 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
 
 
   void fetchOrderNumbers() async {
-    List<String> orderNo = await dbHelper.getOrderMasterOrderNo();
-    shopOwners = (await dbHelper.getOrderMasterDB())!;
+    List<String> orderNo = await dbHelper1.getOrderMasterOrderNo();
+    shopOwners = (await dbHelper1.getOrderMasterDB())!;
 
     // Remove duplicates from the shopNames list
     List<String> uniqueShopNames = orderNo!.toSet().toList();
@@ -103,15 +106,10 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
   }
 
 
-
-
-
-
-
   //
   void fetchShopData() async {
-    List<String> shopNames = await dbHelper.getOrderMasterShopNames();
-    shopOwners = (await dbHelper.getOrderMasterDB())!;
+    List<String> shopNames = await dbHelper1.getOrderMasterShopNames();
+    shopOwners = (await dbHelper1.getOrderMasterDB())!;
 
     setState(() {
       dropdownItems = shopNames.toSet().toList();
