@@ -1,15 +1,15 @@
 
-import 'package:order_booking_shop/Databases/OrderDatabase/DBProductCategory.dart';
 
+import '../Databases/DBHelper.dart';
 import '../Models/AttendanceModel.dart';
 
 class AttendanceRepository {
 
-  DBHelperProductCategory dbHelper = DBHelperProductCategory();
+  DBHelper dbHelper = DBHelper();
 
   Future<List<AttendanceModel>> getAttendance() async {
     var dbClient = await dbHelper.db;
-    List<Map> maps = await dbClient.query('attendance', columns: ['id', 'date' , 'timeIn' , 'userId' , 'latIn' , 'lngIn' ]);
+    List<Map> maps = await dbClient!.query('attendance', columns: ['id', 'date' , 'timeIn' , 'userId' , 'latIn' , 'lngIn' ]);
     List<AttendanceModel> attendance = [];
 
     for (int i = 0; i < maps.length; i++) {
@@ -50,7 +50,7 @@ class AttendanceRepository {
 
   Future<List<AttendanceOutModel>> getAttendanceOut() async {
     var dbClient = await dbHelper.db;
-    List<Map> maps = await dbClient.query('attendanceOut', columns: ['id', 'date' , 'timeOut' ,'totalTime', 'userId' , 'latOut', 'lngOut']);
+    List<Map> maps = await dbClient!.query('attendanceOut', columns: ['id', 'date' , 'timeOut' ,'totalTime', 'userId' , 'latOut', 'lngOut']);
     List<AttendanceOutModel> attendanceout = [];
 
     for (int i = 0; i < maps.length; i++) {
@@ -61,23 +61,23 @@ class AttendanceRepository {
 
   Future<int> addOut(AttendanceOutModel attendanceoutModel) async{
     var dbClient = await dbHelper.db;
-    return await dbClient.insert('attendanceOut' , attendanceoutModel.toMap());
+    return await dbClient!.insert('attendanceOut' , attendanceoutModel.toMap());
   }
 
   Future<int> add(AttendanceModel attendanceModel) async{
     var dbClient = await dbHelper.db;
-    return await dbClient.insert('attendance' , attendanceModel.toMap());
+    return await dbClient!.insert('attendance' , attendanceModel.toMap());
   }
 
   Future<int> update(AttendanceModel attendanceModel) async{
     var dbClient = await dbHelper.db;
-    return await dbClient.update('attendance', attendanceModel.toMap(),
+    return await dbClient!.update('attendance', attendanceModel.toMap(),
         where: 'id= ?', whereArgs: [attendanceModel.id] );
   }
 
   Future<int> delete(int id) async{
     var dbClient = await dbHelper.db;
-    return await dbClient.delete('attendance',
+    return await dbClient!.delete('attendance',
         where: 'id=?', whereArgs: [id] );
   }
 

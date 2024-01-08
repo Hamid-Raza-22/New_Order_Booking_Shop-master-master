@@ -1,15 +1,15 @@
 
 
-import '../Databases/DBHelperRecoveryForm.dart';
+import '../Databases/DBHelper.dart';
 import '../Models/RecoveryFormModel.dart';
 
 class RecoveryFormRepository{
 
-  DBHelperRecoveryForm dbHelperRecoveryForm = DBHelperRecoveryForm();
+  DBHelper dbHelperRecoveryForm = DBHelper();
 
   Future<List<RecoveryFormModel>> getRecoveryForm() async{
     var dbClient = await dbHelperRecoveryForm.db;
-    List<Map> maps = await dbClient.query('recoveryForm',columns: ['recoveryId','date','shopName','netBalance',' userId']);
+    List<Map> maps = await dbClient!.query('recoveryForm',columns: ['recoveryId','date','shopName','netBalance',' userId']);
     List<RecoveryFormModel> recoveryform = [];
     for(int i = 0; i<maps.length; i++)
     {
@@ -39,19 +39,19 @@ class RecoveryFormRepository{
 
   Future<int> add(RecoveryFormModel  recoveryform) async{
     var dbClient = await dbHelperRecoveryForm.db;
-    return await dbClient.insert('recoveryForm',  recoveryform.toMap());
+    return await dbClient!.insert('recoveryForm',  recoveryform.toMap());
   }
 
   Future<int> update(RecoveryFormModel  recoveryform) async{
     var dbClient = await dbHelperRecoveryForm.db;
-    return await dbClient.update('recoveryForm', recoveryform.toMap(),
+    return await dbClient!.update('recoveryForm', recoveryform.toMap(),
         where: 'recoveryForm = ?', whereArgs: [ recoveryform.recoveryId]);
   }
 
 
   Future<int> delete(int recoveryId) async{
     var dbClient = await dbHelperRecoveryForm.db;
-    return await dbClient.delete('recoveryForm',
+    return await dbClient!.delete('recoveryForm',
         where: 'recoveryId = ?', whereArgs: [recoveryId]);
   }
 

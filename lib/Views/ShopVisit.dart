@@ -12,15 +12,12 @@ import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:nanoid/async.dart';
 import 'package:order_booking_shop/API/Globals.dart';
-import 'package:order_booking_shop/Databases/DBHelperShopVisit.dart';
 import 'package:order_booking_shop/View_Models/StockCheckItems.dart';
 import 'package:order_booking_shop/Views/HomePage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../API/DatabaseOutputs.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
-import '../Databases/OrderDatabase/DBHelperProducts.dart';
-import '../Databases/OrderDatabase/DBProductCategory.dart';
+import '../Databases/DBHelper.dart';
 import '../Models/ProductsModel.dart';
 import '../Models/ShopVisitModels.dart';
 import '../Models/StockCheckItems.dart';
@@ -67,7 +64,7 @@ class _ShopVisitState extends State<ShopVisit> {
   List<Map<String, dynamic>> shopOwners = [];
 
 
-  DBHelperOwner dbHelper = DBHelperOwner();
+  DBHelper dbHelper = DBHelper();
   List<String> dropdownItems5 = [];
   List<String> dropdownItems = [];
   List<String> brandDropdownItems = [];
@@ -212,7 +209,7 @@ class _ShopVisitState extends State<ShopVisit> {
 
   // Method to fetch brand items from the database.
   void _fetchBrandItemsFromDatabase() async {
-    DBHelperProducts dbHelper = DBHelperProducts();
+    DBHelper dbHelper = DBHelper();
     List<String> brandItems = await dbHelper.getBrandItems();
 
     // Remove duplicates from the shopNames list
@@ -368,7 +365,7 @@ class _ShopVisitState extends State<ShopVisit> {
                               if (owner['shop_name'] == selectedItem) {
                                 setState(() {
                                   selectedShopOwner = owner['owner_name'];
-                                  selectedOwnerContact = owner['owner_contact'];
+                                  selectedOwnerContact = owner['phone_no'];
                                 });
                               }
                             }
@@ -782,7 +779,7 @@ class _ShopVisitState extends State<ShopVisit> {
 
                             saveStockCheckItems();
 
-                            DBHelperShopVisit dbshop = DBHelperShopVisit();
+                            DBHelper dbshop = DBHelper();
 
                             await dbshop.postShopVisitData();
                             await dbshop.postStockCheckItems();
@@ -930,7 +927,7 @@ class _ShopVisitState extends State<ShopVisit> {
 
                             saveStockCheckItems();
 
-                            DBHelperShopVisit dbshop = DBHelperShopVisit();
+                            DBHelper dbshop = DBHelper();
 
                             await dbshop.postShopVisitData();
                             await dbshop.postStockCheckItems();
@@ -968,7 +965,7 @@ class _ShopVisitState extends State<ShopVisit> {
                           };
 
 
-                          DBHelperShopVisit dbshop = DBHelperShopVisit();
+                          DBHelper dbshop = DBHelper();
 
                           await dbshop.postShopVisitData();
                           await dbshop.postStockCheckItems();
@@ -1010,7 +1007,7 @@ class _ShopVisitState extends State<ShopVisit> {
       stockCheckItemsList.add(stockCheckItems);
     }
 
-    await DBHelperShopVisit().addStockCheckItems(stockCheckItemsList);
+    await DBHelper().addStockCheckItems(stockCheckItemsList);
   }
 
 
@@ -1068,7 +1065,7 @@ class _ShopVisitState extends State<ShopVisit> {
 
   Future<void> fetchProductsNamesByBrand() async {
     String selectedBrand = globalselectedbrand;
-    DBHelperProducts dbHelper = DBHelperProducts();
+    DBHelper dbHelper = DBHelper();
     List<dynamic> productNames = await dbHelper.getProductsNamesByBrand(selectedBrand);
 
     setState(() {

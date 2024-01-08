@@ -5,16 +5,16 @@ import 'dart:typed_data';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
 
-import '../Databases/DBHelperShopVisit.dart';
+import '../Databases/DBHelper.dart';
 import '../Models/ShopVisitModels.dart';
 
 class ShopVisitRepository {
 
-  DBHelperShopVisit dbHelpershopvisit = DBHelperShopVisit();
+  DBHelper dbHelpershopvisit = DBHelper();
 
   Future<List<ShopVisitModel>> getShopVisit() async {
     var dbClient = await dbHelpershopvisit.db;
-    List<Map> maps = await dbClient.query('shopVisit', columns: ['id','date', 'shopName','userId' , 'bookerName' , 'brand' ,'walkthrough', 'planogram' , 'signage', 'productReviewed','feedback','longitude','latitude','address', 'body']);
+    List<Map> maps = await dbClient!.query('shopVisit', columns: ['id','date', 'shopName','userId' , 'bookerName' , 'brand' ,'walkthrough', 'planogram' , 'signage', 'productReviewed','feedback','longitude','latitude','address', 'body']);
     List<ShopVisitModel> shopvisit = [];
 
     for (int i = 0; i < maps.length; i++) {
@@ -25,7 +25,7 @@ class ShopVisitRepository {
 
   Future<String> getLastid() async {
     var dbClient = await dbHelpershopvisit.db;
-    List<Map> maps = await dbClient.query(
+    List<Map> maps = await dbClient!.query(
       'shopVisit',
       columns: ['id'],
       orderBy: 'Id DESC',
@@ -42,7 +42,7 @@ class ShopVisitRepository {
 
     Future<int> add(ShopVisitModel shopvisitModel) async {
       var dbClient = await dbHelpershopvisit.db;
-      return await dbClient.insert('shopVisit', shopvisitModel.toMap());
+      return await dbClient!.insert('shopVisit', shopvisitModel.toMap());
     }
 
   // Future<void> addShopVisit(ShopVisitModel shopVisit) async {
@@ -84,13 +84,13 @@ class ShopVisitRepository {
 
     Future<int> update(ShopVisitModel shopvisitModel) async {
       var dbClient = await dbHelpershopvisit.db;
-      return await dbClient.update('shopVisit', shopvisitModel.toMap(),
+      return await dbClient!.update('shopVisit', shopvisitModel.toMap(),
           where: 'id=?', whereArgs: [shopvisitModel.id]);
     }
 
     Future<int> delete(int id) async {
       var dbClient = await dbHelpershopvisit.db;
-      return await dbClient.delete('shopVisit',
+      return await dbClient!.delete('shopVisit',
           where: 'id=?', whereArgs: [id]);
     }
   }

@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // Redirect to the login page if the user is not logged in
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => LoginForm(),
             // settings: RouteSettings(arguments: dataToPass)
           ),
         );

@@ -2,12 +2,11 @@
 
 import 'package:order_booking_shop/Databases/DBHelper.dart';
 
-import '../../Databases/DBHelperShopVisit.dart';
 import '../../Models/StockCheckItems.dart';
 
 class StockCheckItemsRepository {
 
-  DBHelperShopVisit dbHelperStockCheckItems = DBHelperShopVisit();
+  DBHelper dbHelperStockCheckItems = DBHelper();
 
   Future<List<StockCheckItemsModel>> getStockCheckItems() async {
     var dbClient = await dbHelperStockCheckItems.db;

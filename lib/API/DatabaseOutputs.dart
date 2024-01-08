@@ -1,16 +1,6 @@
 //import 'package:order_booking_shop/Databases/DBHelper.dart';
-import 'package:order_booking_shop/Databases/DBHelperReturnForm.dart';
-import 'package:order_booking_shop/Databases/OrderDatabase/DBHelperOrderDetails.dart';
-import 'package:order_booking_shop/Databases/OrderDatabase/DBHelperOrderMaster.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Databases/DBHelper.dart';
-import '../Databases/DBHelperRecoveryForm.dart';
-import '../Databases/DBHelperShopVisit.dart';
-import '../Databases/DBlogin.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
-import '../Databases/OrderDatabase/DBHelperProducts.dart';
-import '../Databases/OrderDatabase/DBOrderMasterGet.dart';
-import '../Databases/OrderDatabase/DBProductCategory.dart';
 import 'ApiServices.dart';
 
 class DatabaseOutputs{
@@ -39,13 +29,13 @@ class DatabaseOutputs{
     }
   }
   Future<void> update_orderbooking_status() async{
-    final dborderbookingstatus= DBOrderMasterGet();
+    final dborderbookingstatus= DBHelper();
     print("DELETING.......................................");
     await dborderbookingstatus.deleteAllRecords();
   }
   void initialize_orderbooking_status() async{
     final api = ApiServices();
-    final dborderbookingstatus= DBOrderMasterGet();
+    final dborderbookingstatus= DBHelper();
     var OrderBookingStatusdata= await dborderbookingstatus.getOrderBookingStatusDB();
 
 
@@ -63,15 +53,15 @@ class DatabaseOutputs{
   }
   void initializeData() async {
     final api = ApiServices();
-    final db = DBHelperProducts();
-    final dbowner = DBHelperOwner();
-    final dbordermaster= DBOrderMasterGet();
-    final dborderdetails= DBOrderMasterGet();
-    final dbnetbalance= DBOrderMasterGet();
-    final dbaccounts= DBOrderMasterGet();
-    final dborderbookingstatus= DBOrderMasterGet();
-    final dblogin=DBHelperLogin();
-    final dbProductCategory=DBHelperProductCategory();
+    final db = DBHelper();
+    final dbowner = DBHelper();
+    final dbordermaster= DBHelper();
+    final dborderdetails= DBHelper();
+    final dbnetbalance= DBHelper();
+    final dbaccounts= DBHelper();
+    final dborderbookingstatus= DBHelper();
+    final dblogin=DBHelper();
+    final dbProductCategory=DBHelper();
     var Productdata = await db.getProductsDB();
     var OrderMasterdata = await dbordermaster.getOrderMasterDB();
     var OrderDetailsdata = await dborderdetails.getOrderDetailsDB();
@@ -84,7 +74,7 @@ class DatabaseOutputs{
 
 
     if (Accountsdata == null || Accountsdata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/account/get/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/account/get/");
       var results2 = await dbaccounts.insertAccoutsData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -97,7 +87,7 @@ class DatabaseOutputs{
 
 
     if (NetBalancedata == null || NetBalancedata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/accountss/get/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/balance/get/");
       var results2 = await dbnetbalance.insertNetBalanceData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -110,7 +100,7 @@ class DatabaseOutputs{
 
 
     if (OrderBookingStatusdata == null || OrderBookingStatusdata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/orderstatus/get/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/statusget/get/");
       var results2 = await dborderbookingstatus.insertOrderBookingStatusData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -122,7 +112,7 @@ class DatabaseOutputs{
     }
 
     if (OrderMasterdata == null || OrderMasterdata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/ordermastershop/get/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/masterget/get/");
       var results2 = await dbordermaster.insertOrderMasterData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -134,7 +124,7 @@ class DatabaseOutputs{
     }
 
     if (OrderDetailsdata == null || OrderDetailsdata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/orderdetailproduct/get/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/detailget/get/");
       var results2 = await dborderdetails.insertOrderDetailsData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -147,7 +137,7 @@ class DatabaseOutputs{
 
 
     if (Productdata == null || Productdata.isEmpty ) {
-      var response = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/product/record");
+      var response = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/product/get/");
       var results= await db.insertProductsData(response);  //return True or False
       if (results) {
         print("Data inserted successfully.");
@@ -158,7 +148,7 @@ class DatabaseOutputs{
       print("Data is available.");
     }
     if (Owerdata == null || Owerdata.isEmpty ) {
-      var response2 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/AddAhop/record/");
+      var response2 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/owner/get/");
       var results2 = await dbowner.insertOwnerData(response2);   //return True or False
       if (results2) {
         print("Data inserted successfully.");
@@ -169,7 +159,7 @@ class DatabaseOutputs{
       print("Data is available.");
     }
     if (Logindata == null || Logindata.isEmpty ) {
-      var response3 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/login/get/");
+      var response3 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/login/get/");
       var results3= await dblogin.insertLogin(response3);//return True or False
       if (results3) {
         print("Data inserted successfully.");
@@ -180,7 +170,7 @@ class DatabaseOutputs{
       print("Data is available.");
     }
     if (PCdata == null || PCdata.isEmpty ) {
-      var response4 = await api.getApi("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/product_brand/get/");
+      var response4 = await api.getApi("https://apex.oracle.com/pls/apex/metaxperts/brand/get/");
       var results4= await dbProductCategory.insertProductCategory(response4);//return True or False
       if (results4) {
         print("Data inserted successfully.");
@@ -215,14 +205,14 @@ class DatabaseOutputs{
   //    showAllTables();
   // }
   Future<void> update() async {
-    final db = DBHelperProducts();
-    final dbowner = DBHelperOwner();
-    final dblogin=DBHelperLogin();
-    final dbordermaster= DBOrderMasterGet();
-    final dborderdetails= DBOrderMasterGet();
-    final dborderbookingstatus= DBOrderMasterGet();
-    final dbProductCategory=DBHelperProductCategory();
-    final dbnetbalance=DBOrderMasterGet();
+    final db = DBHelper();
+    final dbowner = DBHelper();
+    final dblogin=DBHelper();
+    final dbordermaster= DBHelper();
+    final dborderdetails= DBHelper();
+    final dborderbookingstatus= DBHelper();
+    final dbProductCategory=DBHelper();
+    final dbnetbalance=DBHelper();
     print("DELETING.......................................");
     await db.deleteAllRecords();
     await dbowner.deleteAllRecords();
@@ -236,7 +226,7 @@ class DatabaseOutputs{
   Future<void> showOrderMaster() async {
     print("************Tables SHOWING**************");
     print("************Order Master**************");
-    final db = DBHelperOrderMaster();
+    final db = DBHelper();
 
     var data = await db.getOrderMasterDB();
     int co = 0;
@@ -247,10 +237,25 @@ class DatabaseOutputs{
     print("TOTAL of Order Master is $co");
 
   }
+  Future<void> showOrderMasterData() async {
+    print("************Tables SHOWING**************");
+    print("************Order Master get data**************");
+    final db = DBHelper();
+
+    var data = await db.getOrderMasterDataDB();
+    int co = 0;
+    for(var i in data!){
+      co++;
+      print("$co | ${i.toString()} \n");
+    }
+    print("TOTAL of Order Master get data is $co");
+
+  }
+
   Future<void> showReturnForm() async {
     print("************Tables SHOWING**************");
     print("************Return Form**************");
-    final db = DBHelperReturnForm();
+    final db = DBHelper();
 
     var data = await db.getReturnFormDB();
     int co = 0;
@@ -265,7 +270,7 @@ class DatabaseOutputs{
   Future<void> showRecoveryForm() async {
     print("************Tables SHOWING**************");
     print("************Recovery Form**************");
-    final db = DBHelperRecoveryForm();
+    final db = DBHelper();
 
     var data = await db.getRecoveryFormDB();
     int co = 0;
@@ -294,7 +299,7 @@ class DatabaseOutputs{
   Future<void> showShopVisit() async {
     print("************Tables SHOWING**************");
     print("************SHOP VISIT**************");
-    final db = DBHelperShopVisit();
+    final db = DBHelper();
 
     var data = await db.getShopVisit();
     int co = 0;
@@ -309,7 +314,7 @@ class DatabaseOutputs{
   Future<void> showStockCheckItems() async {
     print("************Tables SHOWING**************");
     print("************Stock Check Items**************");
-    final db = DBHelperShopVisit();
+    final db = DBHelper();
 
     var data = await db.getStockCheckItems();
     int co = 0;
@@ -340,7 +345,7 @@ class DatabaseOutputs{
   Future<void> showOrderDetails() async {
     print("************Tables SHOWING**************");
     print("************Order Details**************");
-    final db = DBHelperOrderMaster();
+    final db = DBHelper();
 
     var data = await db.getOrderDetails();
     int co = 0;
@@ -355,7 +360,7 @@ class DatabaseOutputs{
   Future<void> showAttendance() async {
     print("************Tables SHOWING**************");
     print("************Attendance In**************");
-    final db = DBHelperProductCategory();
+    final db = DBHelper();
 
     var data = await db.getAllAttendance();
     int co = 0;
@@ -369,7 +374,7 @@ class DatabaseOutputs{
   Future<void> showAttendanceOut() async {
     print("************Tables SHOWING**************");
     print("************Attendance Out**************");
-    final db = DBHelperProductCategory();
+    final db = DBHelper();
 
     var data = await db.getAllAttendanceOut();
     int co = 0;
@@ -384,7 +389,7 @@ class DatabaseOutputs{
   Future<void> showReturnFormDetails() async {
     print("************Tables SHOWING**************");
     print("************Return Form Details**************");
-    final db = DBHelperReturnForm();
+    final db = DBHelper();
 
     var data = await db.getReturnFormDetailsDB();
     int co = 0;
@@ -401,15 +406,15 @@ class DatabaseOutputs{
   Future<void> showAllTables() async {
     print("************Tables SHOWING**************");
     print("************Tables Products**************");
-    final db = DBHelperProducts();
-    final dbowner = DBHelperOwner();
-    final dblogin = DBHelperLogin();
-    final dbPC = DBHelperProductCategory();
-    final dbordermaster = DBOrderMasterGet();
-    final dborderdetails = DBOrderMasterGet();
-    final dborderbookingstatus = DBOrderMasterGet();
-    final dbnetbalance = DBOrderMasterGet();
-    final dbaccounts = DBOrderMasterGet();
+    final db = DBHelper();
+    final dbowner = DBHelper();
+    final dblogin = DBHelper();
+    final dbPC = DBHelper();
+    final dbordermaster = DBHelper();
+    final dborderdetails = DBHelper();
+    final dborderbookingstatus = DBHelper();
+    final dbnetbalance = DBHelper();
+    final dbaccounts = DBHelper();
 
     var data = await db.getProductsDB();
     int co = 0;
@@ -462,7 +467,7 @@ class DatabaseOutputs{
       co++;
       print("$co | ${i.toString()} \n");
     }
-    print("TOTAL of OrderDetails is $co");
+    print("TOTAL of OrderDetails data is $co");
 
     print("************Tables Order Booking Status**************");
     co=0;

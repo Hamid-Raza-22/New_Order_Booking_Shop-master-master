@@ -2,7 +2,6 @@ import 'package:order_booking_shop/Databases/DBHelper.dart';
 
 import 'package:order_booking_shop/Models/ShopModel.dart';
 
-import '../Databases/Util.dart';
 
 class ShopRepository {
 
@@ -47,6 +46,7 @@ class ShopRepository {
     // Convert the orderId to a string and return
     return maps[0]['id'].toString();
   }
+
 
 
 

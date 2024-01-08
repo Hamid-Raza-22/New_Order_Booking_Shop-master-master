@@ -9,8 +9,7 @@ import 'package:order_booking_shop/View_Models/RecoveryFormViewModel.dart';
 import 'package:order_booking_shop/Views/RecoveryForm_2ndPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../API/DatabaseOutputs.dart';
-import '../Databases/DBHelperRecoveryForm.dart';
-import '../Databases/OrderDatabase/DBOrderMasterGet.dart';
+import '../Databases/DBHelper.dart';
 
 class RecoveryFromPage extends StatefulWidget {
   @override
@@ -32,7 +31,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   List<String> dropdownItems = [];
   String? selectedDropdownValue;
   List<Map<String, dynamic>> shopOwners = [];
-  DBOrderMasterGet dbHelper = DBOrderMasterGet();
+  DBHelper dbHelper = DBHelper();
   int serialCounter = 1;
   double currentBalance = 0.0;
   String currentUserId = '';
@@ -103,7 +102,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   }
 
   Future<void> fetchAccountsData() async {
-    DBOrderMasterGet dbHelper = DBOrderMasterGet();
+    DBHelper dbHelper = DBHelper();
     List<Map<String, dynamic>>? accounts = await dbHelper.getAccoutsDB();
 
     setState(() {
@@ -149,7 +148,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
   // }
 
   Future<void> fetchShopNamesAndTotals() async {
-    DBOrderMasterGet dbHelper = DBOrderMasterGet();
+    DBHelper dbHelper = DBHelper();
 
     // Calculate total debits, credits, and debits minus credits per shop
     Map<String, dynamic> debitsAndCredits = await dbHelper.getDebitsAndCreditsTotal();
@@ -169,7 +168,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
     // You can update the state or perform other actions with the data here
   }
   Future<void> fetchNetBalanceForShop(String shopName) async {
-    DBOrderMasterGet dbHelper = DBOrderMasterGet();
+    DBHelper dbHelper = DBHelper();
     double shopDebits = 0.0;
     double shopCredits = 0.0;
 
@@ -569,7 +568,7 @@ class _RecoveryFromPageState extends State<RecoveryFromPage> {
                                         ),
                                       );
 
-                                      DBHelperRecoveryForm dbrecoveryform = DBHelperRecoveryForm();
+                                      DBHelper dbrecoveryform = DBHelper();
                                       await dbrecoveryform.postRecoveryFormTable();
 
                                       // Check if cash recovery is not null before moving to the next page

@@ -3,10 +3,10 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:order_booking_shop/API/Globals.dart';
 import 'package:order_booking_shop/Views/HomePage.dart';
 import '../API/DatabaseOutputs.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../Databases/DBHelper.dart';
 import 'CurrentLocationScreen.dart';
 
 void main() {
@@ -40,7 +40,7 @@ class _ShopListPageState extends State<ShopListPage> {
   String selectedOwnerContact= '';
   List<Map<String, dynamic>> shopOwners = [];
 
-  DBHelperOwner dbHelper = DBHelperOwner();
+  DBHelper dbHelper = DBHelper();
 
   void initState() {
     super.initState();

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:order_booking_shop/API/Globals.dart';
-import 'package:order_booking_shop/Databases/OrderDatabase/DBOrderMasterGet.dart';
 
 import '../API/DatabaseOutputs.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
+import '../Databases/DBHelper.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -33,7 +32,7 @@ class _OrderBookingStatusState extends State<OrderBookingStatus> {
   String selectedShopOwner = '';
   String selectedOwnerContact = '';
   List<Map<String, dynamic>> shopOwners = [];
-  DBOrderMasterGet dbHelper = DBOrderMasterGet();
+  DBHelper dbHelper = DBHelper();
   String selectedOrderNoFilter = '';
   String selectedShopFilter = '';
   String selectedStatusFilter = '';

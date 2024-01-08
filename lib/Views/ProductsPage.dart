@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Databases/OrderDatabase/DBHelperProducts.dart';
 
 import '../View_Models/OrderViewModels/ProductsViewModel.dart'; // Import your database-related classes
 

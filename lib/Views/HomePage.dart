@@ -15,7 +15,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:order_booking_shop/API/Globals.dart';
-import 'package:order_booking_shop/Databases/OrderDatabase/DBProductCategory.dart';
 import 'package:order_booking_shop/Models/AttendanceModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
@@ -27,12 +26,8 @@ import 'RecoveryFormPage.dart';
 import 'ReturnFormPage.dart';
 import 'ShopPage.dart';
 import 'ShopVisit.dart';
-import '../Databases/OrderDatabase/DBHelperOwner.dart';
 import 'package:order_booking_shop/Databases/DBHelper.dart';
-import 'package:order_booking_shop/Databases/DBHelperRecoveryForm.dart';
-import 'package:order_booking_shop/Databases/DBHelperReturnForm.dart';
-import 'package:order_booking_shop/Databases/OrderDatabase/DBHelperOrderMaster.dart';
-import '../Databases/DBHelperShopVisit.dart';
+
 //tracker
 import 'dart:async';
 import 'dart:convert';
@@ -278,7 +273,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
   int? attendanceId1;
   double? globalLatitude1;
   double? globalLongitude1;
-  DBHelperOwner dbHelper = DBHelperOwner();
+  DBHelper dbHelper = DBHelper();
   //tracker
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData>? _locationSubscription;
@@ -383,7 +378,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
 
         isClockedIn = true;
 
-        DBHelperProductCategory dbmaster = DBHelperProductCategory();
+        DBHelper dbmaster = DBHelper();
         dbmaster.postAttendanceTable();
 
       } else {
@@ -399,7 +394,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
           lngOut: globalLongitude1,
         ));
         isClockedIn = false;
-        DBHelperProductCategory dbmaster = DBHelperProductCategory();
+        DBHelper dbmaster = DBHelper();
         dbmaster.postAttendanceOutTable();
         _stopTimer();
         setState(() async {
@@ -1090,7 +1085,7 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
       return;
     }
     var request = http.MultipartRequest("POST",
-        Uri.parse("https://g04d40198f41624-i0czh1rzrnvg0r4l.adb.me-dubai-1.oraclecloudapps.com/ords/courage/location/post/"));
+        Uri.parse("https://apex.oracle.com/pls/apex/metaxperts/location/post/"));
     var gpxFile = await http.MultipartFile.fromPath(
         'body', filePath.path);
     request.files.add(gpxFile);
@@ -1201,32 +1196,32 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
   }
 
   Future<void> postShopVisitData() async {
-    DBHelperShopVisit dbHelper = DBHelperShopVisit();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postShopVisitData();
   }
 
   Future<void> postStockCheckItems() async {
-    DBHelperShopVisit dbHelper = DBHelperShopVisit();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postStockCheckItems();
   }
 
   Future<void> postAttendanceOutTable() async {
-    DBHelperProductCategory dbHelper = DBHelperProductCategory();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postAttendanceOutTable();
   }
 
   Future<void> postAttendanceTable() async {
-    DBHelperProductCategory dbHelper = DBHelperProductCategory();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postAttendanceTable();
   }
 
   Future<void> postMasterTable() async {
-    DBHelperOrderMaster dbHelper = DBHelperOrderMaster();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postMasterTable();
   }
 
   Future<void> postOrderDetails() async {
-    DBHelperOrderMaster dbHelper = DBHelperOrderMaster();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postOrderDetails();
   }
 
@@ -1237,18 +1232,18 @@ class _HomePageState extends State<HomePage>with WidgetsBindingObserver {
 
   Future<void> postReturnFormTable() async {
     print('Attempting to post Return data');
-    DBHelperReturnForm dbHelper = DBHelperReturnForm();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postReturnFormTable();
     print('Return data posted successfully');
   }
 
   Future<void> postReturnFormDetails() async {
-    DBHelperReturnForm dbHelper = DBHelperReturnForm();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postReturnFormDetails();
   }
 
   Future<void> postRecoveryFormTable() async {
-    DBHelperRecoveryForm dbHelper = DBHelperRecoveryForm();
+    DBHelper dbHelper = DBHelper();
     await dbHelper.postRecoveryFormTable();
   }
 

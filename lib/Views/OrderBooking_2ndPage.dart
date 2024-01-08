@@ -16,7 +16,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Databases/OrderDatabase/DBHelperOrderMaster.dart';
+import '../Databases/DBHelper.dart';
 import '../Models/OrderModels/OrderDetailsModel.dart';
 import '../Models/OrderModels/OrderMasterModel.dart';
 import '../View_Models/OrderViewModels/OrderDetailsViewModel.dart';
@@ -267,9 +267,9 @@ class _OrderBooking_2ndPageState extends State<OrderBooking_2ndPage> {
 
                                 await saveRowDataDetailsToDatabase(rowDataDetails);
 
-                                await DBHelperOrderMaster().addOrderDetails(orderDetailsList);
+                                await DBHelper().addOrderDetails(orderDetailsList);
 
-                                DBHelperOrderMaster dbmaster = DBHelperOrderMaster();
+                                DBHelper dbmaster = DBHelper();
 
                                 await dbmaster.postMasterTable();
                                 await dbmaster.postOrderDetails();

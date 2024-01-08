@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:order_booking_shop/API/DatabaseOutputs.dart';
-import 'package:order_booking_shop/Databases/DBlogin.dart';
 import 'package:order_booking_shop/Views/HomePage.dart';
 import 'package:order_booking_shop/Views/ShopListPage.dart';
 import '../API/Globals.dart';
+import '../Databases/DBHelper.dart';
 import '../Models/loginModel.dart';
 
 class LoginForm extends StatefulWidget {
@@ -24,7 +24,7 @@ class _LoginFormState extends State<LoginForm> {
     outputs.initializeData();
   }
 
-  final dblogin = DBHelperLogin();
+  final dblogin = DBHelper();
 
   _login() async {
     var response = await dblogin.login(
